@@ -26,8 +26,8 @@ namespace Bluetera {
           string.Concat(
             "ChdibHVldGVyYV9tZXNzYWdlcy5wcm90bxIIYmx1ZXRlcmEiHAoLRWNob1Bh",
             "eWxvYWQSDQoFdmFsdWUYASABKAkiWAoFRXJyb3ISLQoGbW9kdWxlGAEgASgO",
-            "Mh0uYmx1ZXRlcmEuQmx1ZXRlcmFNb2R1bGVzVHlwZRIMCgRjb2RlGAIgASgF",
-            "EhIKCmlubmVyX2NvZGUYAyABKAUiTAoWSW11QWNjZWxlcmF0aW9uUGF5bG9h",
+            "Mh0uYmx1ZXRlcmEuQmx1ZXRlcmFNb2R1bGVzVHlwZRIMCgRjb2RlGAIgASgN",
+            "EhIKCmlubmVyX2NvZGUYAyABKA0iTAoWSW11QWNjZWxlcmF0aW9uUGF5bG9h",
             "ZBIRCgl0aW1lc3RhbXAYASABKA0SCQoBeBgCIAEoAhIJCgF5GAMgASgCEgkK",
             "AXoYBCABKAIiVQoUSW11UXVhdGVybmlvblBheWxvYWQSEQoJdGltZXN0YW1w",
             "GAEgASgNEgkKAXcYAiABKAISCQoBeBgDIAEoAhIJCgF5GAQgASgCEgkKAXoY",
@@ -261,9 +261,9 @@ namespace Bluetera {
 
     /// <summary>Field number for the "code" field.</summary>
     public const int CodeFieldNumber = 2;
-    private int code_;
+    private uint code_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public int Code {
+    public uint Code {
       get { return code_; }
       set {
         code_ = value;
@@ -272,9 +272,9 @@ namespace Bluetera {
 
     /// <summary>Field number for the "inner_code" field.</summary>
     public const int InnerCodeFieldNumber = 3;
-    private int innerCode_;
+    private uint innerCode_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public int InnerCode {
+    public uint InnerCode {
       get { return innerCode_; }
       set {
         innerCode_ = value;
@@ -325,11 +325,11 @@ namespace Bluetera {
       }
       if (Code != 0) {
         output.WriteRawTag(16);
-        output.WriteInt32(Code);
+        output.WriteUInt32(Code);
       }
       if (InnerCode != 0) {
         output.WriteRawTag(24);
-        output.WriteInt32(InnerCode);
+        output.WriteUInt32(InnerCode);
       }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
@@ -343,10 +343,10 @@ namespace Bluetera {
         size += 1 + pb::CodedOutputStream.ComputeEnumSize((int) Module);
       }
       if (Code != 0) {
-        size += 1 + pb::CodedOutputStream.ComputeInt32Size(Code);
+        size += 1 + pb::CodedOutputStream.ComputeUInt32Size(Code);
       }
       if (InnerCode != 0) {
-        size += 1 + pb::CodedOutputStream.ComputeInt32Size(InnerCode);
+        size += 1 + pb::CodedOutputStream.ComputeUInt32Size(InnerCode);
       }
       if (_unknownFields != null) {
         size += _unknownFields.CalculateSize();
@@ -384,11 +384,11 @@ namespace Bluetera {
             break;
           }
           case 16: {
-            Code = input.ReadInt32();
+            Code = input.ReadUInt32();
             break;
           }
           case 24: {
-            InnerCode = input.ReadInt32();
+            InnerCode = input.ReadUInt32();
             break;
           }
         }
