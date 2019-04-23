@@ -204,3 +204,6 @@ FakesAssemblies/
 # Custom ignores
 gallery.xml
 project.lock.json
+
+# protobuf auto-generated
+winrt/BlueteraMessages.cs
