@@ -19,8 +19,8 @@ namespace HelloBlueteraWinRt
         {
             Console.WriteLine("Running");
 
-            BlueteraApi.AdvertismentReceived += BlueteraDevice_AdvertismentReceived;
-            BlueteraApi.ConnectionStatusChanged += BlueteraApi_ConnectionStatusChanged;
+            BlueteraSdk.AdvertismentReceived += BlueteraDevice_AdvertismentReceived;
+            BlueteraSdk.ConnectionStatusChanged += BlueteraApi_ConnectionStatusChanged;
 
             bool running = true;
             Console.WriteLine("'q' - quit\n's' - start scan\n't' - stop scan\n'c' - connect\n'd' - disconnect\n'b' - send scanner command 0x22\n\n");
@@ -36,24 +36,24 @@ namespace HelloBlueteraWinRt
 
                     case 's':
                         Console.WriteLine("Starting Scan");
-                        BlueteraApi.StartScan();
+                        BlueteraSdk.StartScan();
                         break;
 
                     case 't':
                         Console.WriteLine("Stopping Scan");
-                        BlueteraApi.StopScan();
+                        BlueteraSdk.StopScan();
                         break;
 
                     case 'c':
                         Console.WriteLine("Connecting");
-                        BlueteraApi.StopScan();
-                        var paringResult = BlueteraApi.Connect(lastAddress).Result;
+                        BlueteraSdk.StopScan();
+                        var paringResult = BlueteraSdk.Connect(lastAddress).Result;
                         Console.WriteLine($"Pairing result = {paringResult.Status}");
                         break;
 
                     case 'd':
                         Console.WriteLine("Disconnecting");
-                        BlueteraApi.Disconnect(device);
+                        BlueteraSdk.Disconnect(device);
                         break;
 
                     case 'f':
@@ -77,7 +77,7 @@ namespace HelloBlueteraWinRt
                 }
             }
 
-            BlueteraApi.DisposeAll();
+            BlueteraSdk.DisposeAll();
         }
 
         private static void BlueteraApi_ConnectionStatusChanged(BlueteraDevice sender, BluetoothConnectionStatus args)

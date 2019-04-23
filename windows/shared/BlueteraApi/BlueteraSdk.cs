@@ -17,10 +17,9 @@ using System.Runtime.InteropServices.WindowsRuntime;
 
 namespace Bluetera
 {
-    public sealed class BlueteraApi
+    public sealed class BlueteraSdk
     {
-        // Based on / Inspired by https://github.com/Microsoft/Windows-universal-samples.git        
-
+        // Based on / Inspired by https://github.com/Microsoft/Windows-universal-samples.git
         #region Fields
         private static Logger _logger = NLog.LogManager.GetCurrentClassLogger();
         private static ConcurrentBag<ulong> _devicesFound;
@@ -117,7 +116,7 @@ namespace Bluetera
         #endregion
 
         #region Lifecycle        
-        static BlueteraApi()
+        static BlueteraSdk()
         {
             _advWatcher = new BluetoothLEAdvertisementWatcher();        // TODO: use advertisment filters
             _advWatcher.ScanningMode = BluetoothLEScanningMode.Active;

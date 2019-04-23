@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.28307.572
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "BlueteraApi", "shared\BlueteraApi\BlueteraApi.shproj", "{0FA4EA4C-8B81-4FC7-B788-EF1A3194A56C}"
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "BlueteraSdk", "shared\BlueteraApi\BlueteraSdk.shproj", "{0FA4EA4C-8B81-4FC7-B788-EF1A3194A56C}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HelloBlueteraWinRt", "winrt\HelloBlueteraWinRt\HelloBlueteraWinRt.csproj", "{6F808625-8F2A-47B6-81A9-31FD6E75CC4F}"
 EndProject
