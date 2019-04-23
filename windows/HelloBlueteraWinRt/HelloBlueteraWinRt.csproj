@@ -34,10 +34,10 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Google.Protobuf, Version=3.7.0.0, Culture=neutral, PublicKeyToken=a7d26565bac4d604, processorArchitecture=MSIL">
-      <HintPath>..\..\shared\BlueteraApi\packages\Google.Protobuf.3.7.0\lib\net45\Google.Protobuf.dll</HintPath>
+      <HintPath>..\BlueteraSdk\packages\Google.Protobuf.3.7.0\lib\net45\Google.Protobuf.dll</HintPath>
     </Reference>
     <Reference Include="NLog, Version=4.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
-      <HintPath>..\..\shared\BlueteraApi\packages\NLog.4.6.2\lib\net45\NLog.dll</HintPath>
+      <HintPath>..\BlueteraSdk\packages\NLog.4.6.2\lib\net45\NLog.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
@@ -69,7 +69,7 @@
     <None Include="App.config" />
     <None Include="packages.config" />
   </ItemGroup>
-  <Import Project="..\..\shared\BlueteraApi\BlueteraApi.projitems" Label="Shared" />
+  <Import Project="..\BlueteraSdk\BlueteraSdk.projitems" Label="Shared" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PreBuildEvent>if not EXIST "$(ProjectDir)/BlueteraMessages.cs" (

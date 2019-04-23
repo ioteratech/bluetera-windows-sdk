@@ -67,7 +67,6 @@ namespace HelloBlueteraWinRt
                         break;
 
                     case 'i':
-
                         break;
 
                     default:
@@ -108,34 +107,48 @@ namespace HelloBlueteraWinRt
 
         private static async Task ConfigureDevice()
         {
-            UplinkMessage msg = new UplinkMessage()
+            if (device != null)
             {
-                Imu = new ImuCommand()
+                UplinkMessage msg = new UplinkMessage()
                 {
-                    Config = new ImuConfig()
+                    Imu = new ImuCommand()
                     {
-                        DataTypes = (uint)ImuDataType.Accelerometer,
-                        Odr = 50,
-                        AccFsr = 2,
-                        GyroFsr = 1
+                        Config = new ImuConfig()
+                        {
+                            DataTypes = (uint)ImuDataType.Accelerometer,
+                            Odr = 50,
+                            AccFsr = 2,
+                            GyroFsr = 1
+                        }
                     }
-                }
-            };
+                };
 
-            await device.SendMessage(msg);
+                await device.SendMessage(msg);
+            }
+            else
+            {
+                Console.WriteLine("No device is connected - ignoring command");
+            }
         }
 
         private static async Task SendEcho()
         {
-            UplinkMessage msg = new UplinkMessage()
+            if (device != null)
             {
-                Echo = new EchoPayload()
+                UplinkMessage msg = new UplinkMessage()
                 {
-                    Value = "Hello"
-                }
-            };
+                    Echo = new EchoPayload()
+                    {
+                        Value = "Hello"
+                    }
+                };
 
-            await device.SendMessage(msg);
+                await device.SendMessage(msg);
+            }
+            else
+            {
+                Console.WriteLine("No device is connected - ignoring command");
+            }
         }
     }
 }
