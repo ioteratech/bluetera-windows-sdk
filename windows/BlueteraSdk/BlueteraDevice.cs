@@ -30,16 +30,16 @@ namespace Bluetera
         #endregion
 
         #region Properties
-        public BluetoothLEDevice Device { get; private set; }
+        public BluetoothLEDevice BaseDevice { get; private set; }
 
         public string Id
         {
-            get { return Device.BluetoothDeviceId.Id; }
+            get { return BaseDevice.BluetoothDeviceId.Id; }
         }
 
         public ulong Address
         {
-            get { return Device.BluetoothAddress; }
+            get { return BaseDevice.BluetoothAddress; }
         }
 
         public string AddressAsString
@@ -135,7 +135,7 @@ namespace Bluetera
         #region Lifecycle        
         internal BlueteraDevice(BluetoothLEDevice device)
         {
-            Device = device;
+            BaseDevice = device;
         }
 
         internal async Task Start()
@@ -143,14 +143,14 @@ namespace Bluetera
             try
             {
                 // get service and characteristics. This will also physically connect to the device
-                _service = await GetServiceAsync(Device);
+                _service = await GetServiceAsync(BaseDevice);
                 _rxChar = await GetCharacteristicAsync(_service, BlueteraConstants.BusRxCharUuid);
                 _txChar = await GetCharacteristicAsync(_service, BlueteraConstants.BusTxCharUuid);
                 _txChar.ValueChanged += _txChar_ValueChanged;
                 await _txChar.WriteClientCharacteristicConfigurationDescriptorAsync(GattClientCharacteristicConfigurationDescriptorValue.Notify);
 
                 // start watching for device connection/disconnection
-                Device.ConnectionStatusChanged += Device_ConnectionStatusChanged;
+                BaseDevice.ConnectionStatusChanged += Device_ConnectionStatusChanged;
             }
             catch(Exception ex)
             {
@@ -163,7 +163,7 @@ namespace Bluetera
             if (_isDisposed)
                 return;
 
-            Device?.Dispose();
+            BaseDevice?.Dispose();
             _service?.Dispose();
 
             if (_txChar != null)

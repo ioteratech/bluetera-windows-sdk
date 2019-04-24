@@ -65,9 +65,9 @@ namespace Bluetera
 
                 // for non-UWP applications (console, WPF, etc.) uncomment the following to auto-pair with the device
                 // see e.g. https://stackoverflow.com/questions/45191412/deviceinformation-pairasync-not-working-in-wpf/45196036#45196036
-                bluetera.Device.DeviceInformation.Pairing.Custom.PairingRequested += (sender, args) => { args.Accept(); };
+                bluetera.BaseDevice.DeviceInformation.Pairing.Custom.PairingRequested += (sender, args) => { args.Accept(); };
 
-                var bla = await bluetera.Device.DeviceInformation.Pairing.Custom.PairAsync(DevicePairingKinds.ConfirmOnly);
+                var bla = await bluetera.BaseDevice.DeviceInformation.Pairing.Custom.PairAsync(DevicePairingKinds.ConfirmOnly);
 
                 //var bla = await bluetera.Device.DeviceInformation.Pairing.PairAsync(); TODO
                 await bluetera.Start();

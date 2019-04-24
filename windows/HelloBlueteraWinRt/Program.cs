@@ -27,7 +27,7 @@ namespace HelloBlueteraWinRt
             BlueteraSdk.AdvertismentReceived += BlueteraDevice_AdvertismentReceived;            
 
             bool running = true;
-            Console.WriteLine("'q' - quit\n's' - start scan\n't' - stop scan\n'c' - connect\n'd' - disconnect\n'b' - send scanner command 0x22\n\n");
+            Console.WriteLine("\n\n'q' - quit\n's' - start scan\n't' - stop scan\n'c' - connect\n'd' - disconnect\n'e' - send Echo\n\n");
             while (running)
             {
                 var key = Console.ReadKey(true);
@@ -54,7 +54,7 @@ namespace HelloBlueteraWinRt
                         device = BlueteraSdk.Connect(lastAddress).Result;
                         device.ConnectionStatusChanged += Device_ConnectionStatusChanged;
                         device.DownlinkMessageReceived += Device_DownlinkMessageReceived;
-                        Console.WriteLine($"Device connection status: {device.Device.ConnectionStatus}");
+                        Console.WriteLine($"Device connection status: {device.BaseDevice.ConnectionStatus}");
                         break;
 
                     case 'd':
@@ -62,19 +62,19 @@ namespace HelloBlueteraWinRt
                         BlueteraSdk.Disconnect(device);
                         break;
 
-                    case 'f':
-                        {
-                            Console.WriteLine("Sending ImuConfig");
-                            var result = ConfigureDevice().Result;
-                            Console.WriteLine($"Sent ImuConfig - GattCommunicationStatus: {result}");
-                        }
-                        break;
-
                     case 'e':
                         {
                             Console.WriteLine("Sending echo");
                             var result = SendEcho().Result;
                             Console.WriteLine($"GattCommunicationStatus: {result}");
+                        }
+                        break;
+
+                    case 'f':
+                        {
+                            Console.WriteLine("Sending ImuConfig");
+                            var result = ConfigureDevice().Result;
+                            Console.WriteLine($"Sent ImuConfig - GattCommunicationStatus: {result}");
                         }
                         break;
 
@@ -97,6 +97,7 @@ namespace HelloBlueteraWinRt
             }
             else
             {
+                device.Dispose();
                 device = null;
             }
         }
