@@ -14,14 +14,14 @@ namespace HelloBlueteraWinRt
     class Program
     {
         private static BlueteraDevice device;
-        private static ulong lastAddress = 215288213606698UL;
+        private static ulong lastAddress;
 
         static void Main(string[] args)
         {
             // Note!
             // When running in non-UWP desktop applications like this one, you must either:
             // - pair with the Bluetera from Windows Settings before running this example
-            // - 
+            // - uncomment the relevant lines in the BlueteraSdk.Connect() method
 
             Console.WriteLine("Running");
             BlueteraSdk.AdvertismentReceived += BlueteraDevice_AdvertismentReceived;            

@@ -65,13 +65,13 @@ namespace Bluetera
             }
             else
             {
-                throw new ArgumentException();
+                throw new ArgumentException("Invalid UplinkMessage");
             }
         }
         #endregion
 
         #region Events Handlers
-        private async void Device_ConnectionStatusChanged(BluetoothLEDevice sender, object args)
+        private async void _baseDevice_ConnectionStatusChanged(BluetoothLEDevice sender, object args)
         {
             _logger.Debug($"Device_ConnectionStatusChanged() - device = {BlueteraUtilities.UlongAddressAsString(sender.BluetoothAddress)}, status = {sender.ConnectionStatus}");
 
@@ -150,7 +150,7 @@ namespace Bluetera
                 await _txChar.WriteClientCharacteristicConfigurationDescriptorAsync(GattClientCharacteristicConfigurationDescriptorValue.Notify);
 
                 // start watching for device connection/disconnection
-                BaseDevice.ConnectionStatusChanged += Device_ConnectionStatusChanged;
+                BaseDevice.ConnectionStatusChanged += _baseDevice_ConnectionStatusChanged;
             }
             catch(Exception ex)
             {

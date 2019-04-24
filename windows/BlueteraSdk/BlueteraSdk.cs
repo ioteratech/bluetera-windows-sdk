@@ -23,13 +23,12 @@ namespace Bluetera
         #region Fields
         private static Logger _logger = NLog.LogManager.GetCurrentClassLogger();
         private static ConcurrentBag<ulong> _devicesFound;
-        private static ConcurrentDictionary<string, BlueteraDevice> _devices;
+        private static ConcurrentDictionary<string, BlueteraDevice> _connectedDevices;
         private static BluetoothLEAdvertisementWatcher _advWatcher;
         #endregion        
 
         #region Events
         public static event TypedEventHandler<BluetoothLEAdvertisementWatcher, BluetoothLEAdvertisementReceivedEventArgs> AdvertismentReceived;
-        //public static event TypedEventHandler<BlueteraDevice, BluetoothConnectionStatus> ConnectionStatusChanged;
         #endregion
 
         #region Methods
@@ -54,22 +53,22 @@ namespace Bluetera
             BluetoothLEDevice device = await BluetoothLEDevice.FromBluetoothAddressAsync(addr);
 
             // throw if already connected
-            if (_devices.ContainsKey(device.BluetoothDeviceId.Id))
+            if (_connectedDevices.ContainsKey(device.BluetoothDeviceId.Id))
                 throw new InvalidOperationException();
 
             BlueteraDevice bluetera = null;
             if (device != null)
             {
                 bluetera = new BlueteraDevice(device);
-                bluetera.ConnectionStatusChanged += Bluetera_ConnectionStatusChanged;
+                bluetera.ConnectionStatusChanged += _bluetera_ConnectionStatusChanged;
 
-                // for non-UWP applications (console, WPF, etc.) uncomment the following to auto-pair with the device
+                // for non-UWP applications (console, WPF, etc.) uncomment the following code line to auto-pair with the device
                 // see e.g. https://stackoverflow.com/questions/45191412/deviceinformation-pairasync-not-working-in-wpf/45196036#45196036
-                bluetera.BaseDevice.DeviceInformation.Pairing.Custom.PairingRequested += (sender, args) => { args.Accept(); };
+                // bluetera.BaseDevice.DeviceInformation.Pairing.Custom.PairingRequested += (sender, args) => { args.Accept(); };
 
-                var bla = await bluetera.BaseDevice.DeviceInformation.Pairing.Custom.PairAsync(DevicePairingKinds.ConfirmOnly);
-
-                //var bla = await bluetera.Device.DeviceInformation.Pairing.PairAsync(); TODO
+                var pairingResult = await bluetera.BaseDevice.DeviceInformation.Pairing.Custom.PairAsync(DevicePairingKinds.ConfirmOnly);
+                _logger.Debug($"Connect() - pairing status = {pairingResult.Status}");
+                
                 await bluetera.Start();
             }
 
@@ -102,16 +101,16 @@ namespace Bluetera
             AdvertismentReceived?.Invoke(sender, args);
         }
 
-        private static void Bluetera_ConnectionStatusChanged(BlueteraDevice sender, BluetoothConnectionStatus args)
+        private static void _bluetera_ConnectionStatusChanged(BlueteraDevice sender, BluetoothConnectionStatus args)
         {
             if (args == BluetoothConnectionStatus.Connected)
             {
-                _devices.TryAdd(sender.Id, sender);
+                _connectedDevices.TryAdd(sender.Id, sender);
             }
             else
             {
                 BlueteraDevice dummy;
-                _devices.TryRemove(sender.Id, out dummy);
+                _connectedDevices.TryRemove(sender.Id, out dummy);
             }
         }
         #endregion
@@ -123,12 +122,12 @@ namespace Bluetera
             _advWatcher.ScanningMode = BluetoothLEScanningMode.Active;
             _advWatcher.Received += _advWatcher_Received;
 
-            _devices = new ConcurrentDictionary<string, BlueteraDevice>();
+            _connectedDevices = new ConcurrentDictionary<string, BlueteraDevice>();
         }
 
         public static void DisposeAll()
         {
-            foreach (var device in _devices.Values)
+            foreach (var device in _connectedDevices.Values)
                 device.Dispose();
         }
         #endregion
