@@ -14,5 +14,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)BlueteraConstants.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)BlueteraDevice.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)BlueteraUtilities.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)LocalRadioWatcher.cs" />
   </ItemGroup>
 </Project>

@@ -22,30 +22,38 @@ namespace Bluetera
         // Based on / Inspired by https://github.com/Microsoft/Windows-universal-samples.git
         #region Fields
         private static Logger _logger = NLog.LogManager.GetCurrentClassLogger();
-        private static ConcurrentBag<ulong> _devicesFound;
-        private static ConcurrentDictionary<string, BlueteraDevice> _connectedDevices;
-        private static BluetoothLEAdvertisementWatcher _advWatcher;
-        #endregion        
+        private ConcurrentBag<ulong> _devicesFound;
+        private ConcurrentDictionary<string, BlueteraDevice> _connectedDevices;
+        private BluetoothLEAdvertisementWatcher _advWatcher;
+        private static readonly Lazy<BlueteraSdk> _instance = new Lazy<BlueteraSdk>(() => new BlueteraSdk());
+        #endregion
+
+        #region Properties
+        public static BlueteraSdk Instance
+        {
+            get { return _instance.Value; }
+        }
+        #endregion
 
         #region Events
-        public static event TypedEventHandler<BluetoothLEAdvertisementWatcher, BluetoothLEAdvertisementReceivedEventArgs> AdvertismentReceived;
+        public event TypedEventHandler<BluetoothLEAdvertisementWatcher, BluetoothLEAdvertisementReceivedEventArgs> AdvertismentReceived;
         #endregion
 
         #region Methods
-        public static void StartScan()
+        public void StartScan()
         {
             _logger.Info($"StartScan() - called");
             _devicesFound = new ConcurrentBag<ulong>();
             _advWatcher.Start();
         }
 
-        public static void StopScan()
+        public void StopScan()
         {
             _logger.Info($"StopScan() - called");
             _advWatcher.Stop();
         }
 
-        public static async Task<BlueteraDevice> Connect(ulong addr)
+        public async Task<BlueteraDevice> Connect(ulong addr)
         {
             _logger.Info($"Connect() - called with address = {addr}");
 
@@ -75,7 +83,7 @@ namespace Bluetera
             return bluetera;
         }
 
-        public static void Disconnect(BlueteraDevice device)
+        public void Disconnect(BlueteraDevice device)
         {
             // Windows does not have a 'Disconnect' method per-se. The way to prevent the device from auto-connecting is to dispose it and any services it holds
             // See https://social.msdn.microsoft.com/Forums/windowsdesktop/en-US/9eae39ff-f6ca-4aa9-adaf-97450f2b4a6c/disconnect-bluetooth-low-energy?forum=wdk
@@ -84,7 +92,7 @@ namespace Bluetera
         #endregion
 
         #region Events handlers
-        private static void _advWatcher_Received(BluetoothLEAdvertisementWatcher sender, BluetoothLEAdvertisementReceivedEventArgs args)
+        private void _advWatcher_Received(BluetoothLEAdvertisementWatcher sender, BluetoothLEAdvertisementReceivedEventArgs args)
         {
             _logger.Debug($"_advWatcher_Received() - found device = {args.BluetoothAddress}");
 
@@ -101,7 +109,7 @@ namespace Bluetera
             AdvertismentReceived?.Invoke(sender, args);
         }
 
-        private static void _bluetera_ConnectionStatusChanged(BlueteraDevice sender, BluetoothConnectionStatus args)
+        private void _bluetera_ConnectionStatusChanged(BlueteraDevice sender, BluetoothConnectionStatus args)
         {
             if (args == BluetoothConnectionStatus.Connected)
             {
@@ -116,7 +124,7 @@ namespace Bluetera
         #endregion
 
         #region Lifecycle        
-        static BlueteraSdk()
+        private BlueteraSdk()
         {
             _advWatcher = new BluetoothLEAdvertisementWatcher();        // TODO: use advertisment filters
             _advWatcher.ScanningMode = BluetoothLEScanningMode.Active;
@@ -125,7 +133,7 @@ namespace Bluetera
             _connectedDevices = new ConcurrentDictionary<string, BlueteraDevice>();
         }
 
-        public static void DisposeAll()
+        public void DisposeAll()
         {
             foreach (var device in _connectedDevices.Values)
                 device.Dispose();

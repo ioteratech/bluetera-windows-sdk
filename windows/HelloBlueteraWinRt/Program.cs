@@ -18,13 +18,14 @@ namespace HelloBlueteraWinRt
 
         static void Main(string[] args)
         {
-            // Note!
+            // Note
             // When running in non-UWP desktop applications like this one, you must either:
             // - pair with the Bluetera from Windows Settings before running this example
-            // - uncomment the relevant lines in the BlueteraSdk.Connect() method
-
+            // - uncomment the relevant lines in the sdkConnect() method
             Console.WriteLine("Running");
-            BlueteraSdk.AdvertismentReceived += BlueteraDevice_AdvertismentReceived;            
+
+            BlueteraSdk sdk = BlueteraSdk.Instance;
+            sdk.AdvertismentReceived += BlueteraDevice_AdvertismentReceived;            
 
             bool running = true;
             Console.WriteLine("\n\n'q' - quit\n's' - start scan\n't' - stop scan\n'c' - connect\n'd' - disconnect\n'e' - send Echo\n\n");
@@ -40,18 +41,18 @@ namespace HelloBlueteraWinRt
 
                     case 's':
                         Console.WriteLine("Starting Scan");
-                        BlueteraSdk.StartScan();
+                        sdk.StartScan();
                         break;
 
                     case 't':
                         Console.WriteLine("Stopping Scan");
-                        BlueteraSdk.StopScan();
+                        sdk.StopScan();
                         break;
 
                     case 'c':
                         Console.WriteLine("Connecting");
-                        BlueteraSdk.StopScan();
-                        device = BlueteraSdk.Connect(lastAddress).Result;
+                        sdk.StopScan();
+                        device = sdk.Connect(lastAddress).Result;
                         device.ConnectionStatusChanged += Device_ConnectionStatusChanged;
                         device.DownlinkMessageReceived += Device_DownlinkMessageReceived;
                         Console.WriteLine($"Device connection status: {device.BaseDevice.ConnectionStatus}");
@@ -59,7 +60,7 @@ namespace HelloBlueteraWinRt
 
                     case 'd':
                         Console.WriteLine("Disconnecting");
-                        BlueteraSdk.Disconnect(device);
+                        sdk.Disconnect(device);
                         break;
 
                     case 'e':
@@ -70,14 +71,6 @@ namespace HelloBlueteraWinRt
                         }
                         break;
 
-                    case 'f':
-                        {
-                            Console.WriteLine("Sending ImuConfig");
-                            var result = ConfigureDevice().Result;
-                            Console.WriteLine($"Sent ImuConfig - GattCommunicationStatus: {result}");
-                        }
-                        break;
-
                     default:
                         Console.WriteLine("Invalid command");
                         break;
@@ -85,7 +78,7 @@ namespace HelloBlueteraWinRt
                 }
             }
 
-            BlueteraSdk.DisposeAll();
+            sdk.DisposeAll();
         }
 
         private static void Device_ConnectionStatusChanged(BlueteraDevice sender, BluetoothConnectionStatus args)
@@ -111,25 +104,6 @@ namespace HelloBlueteraWinRt
         {
             Console.WriteLine($"Bluetera found: {BlueteraUtilities.UlongAddressAsString(args.BluetoothAddress)}");
             lastAddress = args.BluetoothAddress;
-        }
-
-        private static async Task<GattCommunicationStatus> ConfigureDevice()
-        {
-            UplinkMessage msg = new UplinkMessage()
-            {
-                Imu = new ImuCommand()
-                {
-                    Config = new ImuConfig()
-                    {
-                        DataTypes = (uint)ImuDataType.Accelerometer,
-                        Odr = 50,
-                        AccFsr = 2,
-                        GyroFsr = 1
-                    }
-                }
-            };
-
-            return await device.SendMessage(msg);
         }
 
         private static async Task<GattCommunicationStatus> SendEcho()
