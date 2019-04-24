@@ -49,7 +49,7 @@ namespace Bluetera
         #endregion
 
         #region Events
-        internal event TypedEventHandler<BlueteraDevice, BluetoothConnectionStatus> ConnectionStatusChanged;
+        public event TypedEventHandler<BlueteraDevice, BluetoothConnectionStatus> ConnectionStatusChanged;
         public event TypedEventHandler<BlueteraDevice, DownlinkMessage> DownlinkMessageReceived;
         #endregion
 
@@ -77,18 +77,10 @@ namespace Bluetera
 
             try
             {
-                // protect against race conditions
-                Debug.Assert(sender == Device);
-
                 if (sender.ConnectionStatus == BluetoothConnectionStatus.Connected)
                 {
-                    _txChar.ValueChanged += _txChar_ValueChanged;
-                    await _txChar.WriteClientCharacteristicConfigurationDescriptorAsync(GattClientCharacteristicConfigurationDescriptorValue.Notify);
-                }
-                else
-                {
                     if (_txChar != null)
-                        _txChar.ValueChanged -= _txChar_ValueChanged;
+                        await _txChar.WriteClientCharacteristicConfigurationDescriptorAsync(GattClientCharacteristicConfigurationDescriptorValue.Notify);
                 }
 
                 ConnectionStatusChanged?.Invoke(this, sender.ConnectionStatus);
@@ -144,14 +136,26 @@ namespace Bluetera
         internal BlueteraDevice(BluetoothLEDevice device)
         {
             Device = device;
-            Device.ConnectionStatusChanged += Device_ConnectionStatusChanged;
         }
 
         internal async Task Start()
-        {
-            _service = await GetServiceAsync(Device);
-            _txChar = await GetCharacteristicAsync(_service, BlueteraConstants.BusTxCharUuid);
-            _rxChar = await GetCharacteristicAsync(_service, BlueteraConstants.BusRxCharUuid);
+        {            
+            try
+            {
+                // get service and characteristics. This will also physically connect to the device
+                _service = await GetServiceAsync(Device);
+                _rxChar = await GetCharacteristicAsync(_service, BlueteraConstants.BusRxCharUuid);
+                _txChar = await GetCharacteristicAsync(_service, BlueteraConstants.BusTxCharUuid);
+                _txChar.ValueChanged += _txChar_ValueChanged;
+                await _txChar.WriteClientCharacteristicConfigurationDescriptorAsync(GattClientCharacteristicConfigurationDescriptorValue.Notify);
+
+                // start watching for device connection/disconnection
+                Device.ConnectionStatusChanged += Device_ConnectionStatusChanged;
+            }
+            catch(Exception ex)
+            {
+                throw new BlueteraException("Failed to obtain Bluetera service - make sure the device has been paired", ex);
+            }
         }
 
         public void Dispose()
@@ -161,6 +165,10 @@ namespace Bluetera
 
             Device?.Dispose();
             _service?.Dispose();
+
+            if (_txChar != null)
+                _txChar.ValueChanged -= _txChar_ValueChanged;
+
             _txChar = null;
             _rxChar = null;
 

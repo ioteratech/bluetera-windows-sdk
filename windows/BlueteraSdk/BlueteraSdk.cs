@@ -29,7 +29,7 @@ namespace Bluetera
 
         #region Events
         public static event TypedEventHandler<BluetoothLEAdvertisementWatcher, BluetoothLEAdvertisementReceivedEventArgs> AdvertismentReceived;
-        public static event TypedEventHandler<BlueteraDevice, BluetoothConnectionStatus> ConnectionStatusChanged;
+        //public static event TypedEventHandler<BlueteraDevice, BluetoothConnectionStatus> ConnectionStatusChanged;
         #endregion
 
         #region Methods
@@ -46,27 +46,34 @@ namespace Bluetera
             _advWatcher.Stop();
         }
 
-        public static async Task<DevicePairingResult> Connect(ulong addr)
+        public static async Task<BlueteraDevice> Connect(ulong addr)
         {
             _logger.Info($"Connect() - called with address = {addr}");
 
-            // get device            
+            // get device                        
             BluetoothLEDevice device = await BluetoothLEDevice.FromBluetoothAddressAsync(addr);
 
             // throw if already connected
             if (_devices.ContainsKey(device.BluetoothDeviceId.Id))
                 throw new InvalidOperationException();
 
-            DevicePairingResult result = null;
+            BlueteraDevice bluetera = null;
             if (device != null)
             {
-                BlueteraDevice bluetera = new BlueteraDevice(device);
+                bluetera = new BlueteraDevice(device);
                 bluetera.ConnectionStatusChanged += Bluetera_ConnectionStatusChanged;
-                result = await bluetera.Device.DeviceInformation.Pairing.Custom.PairAsync(DevicePairingKinds.ConfirmOnly);
+
+                // for non-UWP applications (console, WPF, etc.) uncomment the following to auto-pair with the device
+                // see e.g. https://stackoverflow.com/questions/45191412/deviceinformation-pairasync-not-working-in-wpf/45196036#45196036
+                bluetera.Device.DeviceInformation.Pairing.Custom.PairingRequested += (sender, args) => { args.Accept(); };
+
+                var bla = await bluetera.Device.DeviceInformation.Pairing.Custom.PairAsync(DevicePairingKinds.ConfirmOnly);
+
+                //var bla = await bluetera.Device.DeviceInformation.Pairing.PairAsync(); TODO
                 await bluetera.Start();
             }
 
-            return result;
+            return bluetera;
         }
 
         public static void Disconnect(BlueteraDevice device)
@@ -99,18 +106,12 @@ namespace Bluetera
         {
             if (args == BluetoothConnectionStatus.Connected)
             {
-                if(_devices.TryAdd(sender.Id, sender))
-                {
-                    ConnectionStatusChanged?.Invoke(sender, args);
-                }
+                _devices.TryAdd(sender.Id, sender);
             }
             else
             {
                 BlueteraDevice dummy;
-                if(_devices.TryRemove(sender.Id, out dummy))
-                {
-                    ConnectionStatusChanged?.Invoke(sender, args);
-                }
+                _devices.TryRemove(sender.Id, out dummy);
             }
         }
         #endregion

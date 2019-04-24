@@ -7,20 +7,24 @@ using Bluetera;
 using Bluetera.Utilities;
 using Windows.Devices.Bluetooth;
 using Windows.Devices.Bluetooth.Advertisement;
+using Windows.Devices.Bluetooth.GenericAttributeProfile;
 
 namespace HelloBlueteraWinRt
 {
     class Program
     {
         private static BlueteraDevice device;
-        private static ulong lastAddress;
+        private static ulong lastAddress = 215288213606698UL;
 
         static void Main(string[] args)
         {
-            Console.WriteLine("Running");
+            // Note!
+            // When running in non-UWP desktop applications like this one, you must either:
+            // - pair with the Bluetera from Windows Settings before running this example
+            // - 
 
-            BlueteraSdk.AdvertismentReceived += BlueteraDevice_AdvertismentReceived;
-            BlueteraSdk.ConnectionStatusChanged += BlueteraApi_ConnectionStatusChanged;
+            Console.WriteLine("Running");
+            BlueteraSdk.AdvertismentReceived += BlueteraDevice_AdvertismentReceived;            
 
             bool running = true;
             Console.WriteLine("'q' - quit\n's' - start scan\n't' - stop scan\n'c' - connect\n'd' - disconnect\n'b' - send scanner command 0x22\n\n");
@@ -47,8 +51,10 @@ namespace HelloBlueteraWinRt
                     case 'c':
                         Console.WriteLine("Connecting");
                         BlueteraSdk.StopScan();
-                        var paringResult = BlueteraSdk.Connect(lastAddress).Result;
-                        Console.WriteLine($"Pairing result = {paringResult.Status}");
+                        device = BlueteraSdk.Connect(lastAddress).Result;
+                        device.ConnectionStatusChanged += Device_ConnectionStatusChanged;
+                        device.DownlinkMessageReceived += Device_DownlinkMessageReceived;
+                        Console.WriteLine($"Device connection status: {device.Device.ConnectionStatus}");
                         break;
 
                     case 'd':
@@ -57,16 +63,19 @@ namespace HelloBlueteraWinRt
                         break;
 
                     case 'f':
-                        Console.WriteLine("Configuring device");
-                        ConfigureDevice().Wait();
+                        {
+                            Console.WriteLine("Sending ImuConfig");
+                            var result = ConfigureDevice().Result;
+                            Console.WriteLine($"Sent ImuConfig - GattCommunicationStatus: {result}");
+                        }
                         break;
 
                     case 'e':
-                        Console.WriteLine("Sending echo");
-                        SendEcho().Wait();
-                        break;
-
-                    case 'i':
+                        {
+                            Console.WriteLine("Sending echo");
+                            var result = SendEcho().Result;
+                            Console.WriteLine($"GattCommunicationStatus: {result}");
+                        }
                         break;
 
                     default:
@@ -79,17 +88,15 @@ namespace HelloBlueteraWinRt
             BlueteraSdk.DisposeAll();
         }
 
-        private static void BlueteraApi_ConnectionStatusChanged(BlueteraDevice sender, BluetoothConnectionStatus args)
+        private static void Device_ConnectionStatusChanged(BlueteraDevice sender, BluetoothConnectionStatus args)
         {
             Console.WriteLine($"Connection status changed. Device = {sender.AddressAsString}, Status = {args}");
             if (args == BluetoothConnectionStatus.Connected)
             {
                 device = sender;
-                device.DownlinkMessageReceived += Device_DownlinkMessageReceived;
             }
             else
             {
-                device.DownlinkMessageReceived -= Device_DownlinkMessageReceived;
                 device = null;
             }
         }
@@ -102,53 +109,39 @@ namespace HelloBlueteraWinRt
         private static void BlueteraDevice_AdvertismentReceived(BluetoothLEAdvertisementWatcher sender, BluetoothLEAdvertisementReceivedEventArgs args)
         {
             Console.WriteLine($"Bluetera found: {BlueteraUtilities.UlongAddressAsString(args.BluetoothAddress)}");
-            lastAddress = args.BluetoothAddress;            
+            lastAddress = args.BluetoothAddress;
         }
 
-        private static async Task ConfigureDevice()
+        private static async Task<GattCommunicationStatus> ConfigureDevice()
         {
-            if (device != null)
+            UplinkMessage msg = new UplinkMessage()
             {
-                UplinkMessage msg = new UplinkMessage()
+                Imu = new ImuCommand()
                 {
-                    Imu = new ImuCommand()
+                    Config = new ImuConfig()
                     {
-                        Config = new ImuConfig()
-                        {
-                            DataTypes = (uint)ImuDataType.Accelerometer,
-                            Odr = 50,
-                            AccFsr = 2,
-                            GyroFsr = 1
-                        }
+                        DataTypes = (uint)ImuDataType.Accelerometer,
+                        Odr = 50,
+                        AccFsr = 2,
+                        GyroFsr = 1
                     }
-                };
+                }
+            };
 
-                await device.SendMessage(msg);
-            }
-            else
-            {
-                Console.WriteLine("No device is connected - ignoring command");
-            }
+            return await device.SendMessage(msg);
         }
 
-        private static async Task SendEcho()
+        private static async Task<GattCommunicationStatus> SendEcho()
         {
-            if (device != null)
+            UplinkMessage msg = new UplinkMessage()
             {
-                UplinkMessage msg = new UplinkMessage()
+                Echo = new EchoPayload()
                 {
-                    Echo = new EchoPayload()
-                    {
-                        Value = "Hello"
-                    }
-                };
+                    Value = "Hello"
+                }
+            };
 
-                await device.SendMessage(msg);
-            }
-            else
-            {
-                Console.WriteLine("No device is connected - ignoring command");
-            }
+            return await device.SendMessage(msg);
         }
     }
 }

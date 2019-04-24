@@ -9,6 +9,7 @@
     <Import_RootNamespace>Bluetera</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)BlueteraException.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)BlueteraSdk.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)BlueteraConstants.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)BlueteraDevice.cs" />
