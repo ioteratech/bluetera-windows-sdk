@@ -10,8 +10,6 @@ using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
-//using System.Windows.Media;
-//using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Windows.Media.Media3D;
@@ -23,10 +21,12 @@ using Windows.Devices.Bluetooth.GenericAttributeProfile;
 
 namespace HelloBlueteraWpf
 {
+    public enum ApplicationStatusType { Idle, Scanning, Connecting, Connected, Disconnecting, Failed }
+
     public partial class MainWindow : Window, INotifyPropertyChanged
     {
         #region Constants / Enums
-        public enum ApplicationStatusType { Idle, Scanning, Connecting, Connected, Disconnecting, Failed }
+        
         #endregion        
 
         #region Lifecycle
@@ -56,14 +56,12 @@ namespace HelloBlueteraWpf
         #endregion
 
         #region Event handlers
-        private async void StartButton_Click(object sender, RoutedEventArgs e)
+        private void StartButton_Click(object sender, RoutedEventArgs e)
         {
-            var rotation = new System.Windows.Media.Media3D.QuaternionRotation3D();
-            rotation.Quaternion = new System.Windows.Media.Media3D.Quaternion(1, 0, 0, 0);
-            CubeModel.Transform = new System.Windows.Media.Media3D.RotateTransform3D(rotation);
+            _sdk.StartScan();
         }
 
-        private async void ResetCubeButton_Click(object sender, RoutedEventArgs e)
+        private void ResetCubeButton_Click(object sender, RoutedEventArgs e)
         {
 
         }
