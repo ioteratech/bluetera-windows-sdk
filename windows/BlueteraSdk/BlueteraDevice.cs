@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
-using NLog;
 using Windows.Devices.Bluetooth;
 using Windows.Devices.Enumeration;
 using Windows.Devices.Bluetooth.Advertisement;
@@ -21,7 +20,6 @@ namespace Bluetera
     public sealed class BlueteraDevice : IDisposable
     {
         #region Fields
-        private static Logger _logger = NLog.LogManager.GetCurrentClassLogger();
         private GattDeviceService _service;
         private GattCharacteristic _txChar;     // TX is Bluetera --> Central (using Notifications)
         private GattCharacteristic _rxChar;     // RX is Central --> Bluetera     
@@ -73,8 +71,6 @@ namespace Bluetera
         #region Events Handlers
         private async void _baseDevice_ConnectionStatusChanged(BluetoothLEDevice sender, object args)
         {
-            _logger.Debug($"Device_ConnectionStatusChanged() - device = {BlueteraUtilities.UlongAddressAsString(sender.BluetoothAddress)}, status = {sender.ConnectionStatus}");
-
             try
             {
                 if (sender.ConnectionStatus == BluetoothConnectionStatus.Connected)
@@ -87,14 +83,12 @@ namespace Bluetera
             }
             catch (Exception ex)
             {
-                _logger.Error(ex);
+                /* Currently ignore */
             }
         }
 
         private void _txChar_ValueChanged(GattCharacteristic sender, GattValueChangedEventArgs args)
         {
-            _logger.Trace($"_txChar_ValueChanged() - received {args.CharacteristicValue.Length} bytes");
-
             // enqueue new data
             var data = new byte[args.CharacteristicValue.Length];
             DataReader.FromBuffer(args.CharacteristicValue).ReadBytes(data);

@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using NLog;
 using Windows.Devices.Bluetooth;
 using Windows.Devices.Enumeration;
 using Windows.Devices.Bluetooth.Advertisement;
@@ -21,7 +20,6 @@ namespace Bluetera
     {
         // Based on / Inspired by https://github.com/Microsoft/Windows-universal-samples.git
         #region Fields
-        private static Logger _logger = NLog.LogManager.GetCurrentClassLogger();
         private ConcurrentBag<ulong> _devicesFound;
         private ConcurrentDictionary<string, BlueteraDevice> _connectedDevices;
         private BluetoothLEAdvertisementWatcher _advWatcher;
@@ -42,21 +40,17 @@ namespace Bluetera
         #region Methods
         public void StartScan()
         {
-            _logger.Info($"StartScan() - called");
             _devicesFound = new ConcurrentBag<ulong>();
             _advWatcher.Start();
         }
 
         public void StopScan()
         {
-            _logger.Info($"StopScan() - called");
             _advWatcher.Stop();
         }
 
-        public async Task<BlueteraDevice> Connect(ulong addr)
+        public async Task<BlueteraDevice> Connect(ulong addr, bool autopair = false)
         {
-            _logger.Info($"Connect() - called with address = {addr}");
-
             // get device                        
             BluetoothLEDevice device = await BluetoothLEDevice.FromBluetoothAddressAsync(addr);
 
@@ -70,14 +64,21 @@ namespace Bluetera
                 bluetera = new BlueteraDevice(device);
                 bluetera.ConnectionStatusChanged += _bluetera_ConnectionStatusChanged;
 
-                // for non-UWP applications (console, WPF, etc.) uncomment the following code line to auto-pair with the device
+                // non-UWP applications (console, WPF, etc.) should use the auto-pair with the device, or the pairing result will be 'RequiredHandlerNotRegistered'
                 // see e.g. https://stackoverflow.com/questions/45191412/deviceinformation-pairasync-not-working-in-wpf/45196036#45196036
-                // bluetera.BaseDevice.DeviceInformation.Pairing.Custom.PairingRequested += (sender, args) => { args.Accept(); };
+                if (autopair)
+                    bluetera.BaseDevice.DeviceInformation.Pairing.Custom.PairingRequested += (sender, args) => { args.Accept(); };
 
-                var pairingResult = await bluetera.BaseDevice.DeviceInformation.Pairing.Custom.PairAsync(DevicePairingKinds.ConfirmOnly);
-                _logger.Debug($"Connect() - pairing status = {pairingResult.Status}");
-                
-                await bluetera.Start();
+                var result = await bluetera.BaseDevice.DeviceInformation.Pairing.Custom.PairAsync(DevicePairingKinds.ConfirmOnly);
+
+                if ((result.Status == DevicePairingResultStatus.AlreadyPaired) || (result.Status == DevicePairingResultStatus.Paired))
+                {
+                    await bluetera.Start();
+                }
+                else
+                {
+                    throw new BlueteraException($"Operation failed. Pairing result = {result.Status}");
+                }
             }
 
             return bluetera;
@@ -94,8 +95,6 @@ namespace Bluetera
         #region Events handlers
         private void _advWatcher_Received(BluetoothLEAdvertisementWatcher sender, BluetoothLEAdvertisementReceivedEventArgs args)
         {
-            _logger.Debug($"_advWatcher_Received() - found device = {args.BluetoothAddress}");
-
             // Ignore non-Bluetera devices
             if (!BlueteraConstants.ValidDeviceNames.Contains(args.Advertisement.LocalName))
                 return;

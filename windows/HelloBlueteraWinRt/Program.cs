@@ -25,7 +25,7 @@ namespace HelloBlueteraWinRt
             Console.WriteLine("Running");
 
             BlueteraSdk sdk = BlueteraSdk.Instance;
-            sdk.AdvertismentReceived += BlueteraDevice_AdvertismentReceived;            
+            sdk.AdvertismentReceived += BlueteraDevice_AdvertismentReceived;
 
             bool running = true;
             Console.WriteLine("\n\n'q' - quit\n's' - start scan\n't' - stop scan\n'c' - connect\n'd' - disconnect\n'e' - send Echo\n\n");
@@ -52,7 +52,7 @@ namespace HelloBlueteraWinRt
                     case 'c':
                         Console.WriteLine("Connecting");
                         sdk.StopScan();
-                        device = sdk.Connect(lastAddress).Result;
+                        device = sdk.Connect(lastAddress, autopair: true).Result;   // Note: non-UWP apps (like this one) should set autopair:true. See BlueteraSdk.Connect() for more info
                         device.ConnectionStatusChanged += Device_ConnectionStatusChanged;
                         device.DownlinkMessageReceived += Device_DownlinkMessageReceived;
                         Console.WriteLine($"Device connection status: {device.BaseDevice.ConnectionStatus}");
