@@ -7,9 +7,8 @@
         <!-- taken from https://github.com/Microsoft/WPF-Samples.git, Animation\AnimationExamples\App.xaml -->
 
         <!-- Styles & Templates -->
-        <Style TargetType="{x:Type TextBlock}">
+        <Style TargetType="{x:Type Label}">
             <Setter Property="FontFamily" Value="Verdana" />
-            <Setter Property="TextWrapping" Value="Wrap" />
             <Setter Property="FontWeight" Value="Normal" />
         </Style>
 

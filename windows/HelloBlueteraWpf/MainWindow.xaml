@@ -83,8 +83,10 @@
             <Button x:Name="StartButton" Content="Start" Width="100" Height="30" Grid.Column="0" Margin="5,5,10,5" HorizontalAlignment="Right" Click="StartButton_Click"/>
             <Button x:Name="ResetCubeButton" Content="Reset Cube" Width="100" Height="30" Grid.Column="1" Margin="10,5,5,5" HorizontalAlignment="Left" Click="ResetCubeButton_Click"/>
         </Grid>
-        <StackPanel x:Name="StatusPanel" Orientation="Vertical">
-            <TextBlock x:Name="StatusLabel" MinHeight="30" Margin="5,5,5,0" TextWrapping="Wrap" Text="{Binding Status}" Foreground="AliceBlue"/>
+        <StackPanel x:Name="StatusPanel" Orientation="Horizontal">
+            <Label x:Name="StatusLabel" Height="30" Width="80"  Margin="5,0,5,0" Content="{Binding ApplicationState}" Foreground="AliceBlue"/>
+            <Separator/>
+            <Label x:Name="DeviceLabel" Height="30" Width="200"  Margin="5,0,0,0" Content="" Foreground="AliceBlue" HorizontalAlignment="Left"/>
         </StackPanel>
     </StackPanel>
 
