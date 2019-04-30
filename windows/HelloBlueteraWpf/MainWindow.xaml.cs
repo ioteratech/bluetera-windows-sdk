@@ -105,8 +105,7 @@ namespace HelloBlueteraWpf
                     ApplicationState = ApplicationStateType.Connected;
                     DeviceLabel.Content = _bluetera.AddressAsString;
 
-                    // Configure and Start IMU. Methods will throw on failure
-                    await ConfigureImu();
+                    // Start IMU. Methods will throw on failure
                     await StartImu();
                 }
                 catch (BlueteraException)
@@ -135,7 +134,6 @@ namespace HelloBlueteraWpf
                     // re-enable IMU
                     if (args == BluetoothConnectionStatus.Connected)
                     {
-                        await ConfigureImu();
                         await StartImu();
                         ApplicationState = ApplicationStateType.Connected;
                         DeviceLabel.Content = _bluetera.AddressAsString;
@@ -178,32 +176,20 @@ namespace HelloBlueteraWpf
         #endregion
 
         #region Helpers
-        private async Task ConfigureImu()
+
+        private async Task StartImu()
         {
             UplinkMessage msg = new UplinkMessage()
             {
                 Imu = new ImuCommand
                 {
-                    Config = new ImuConfig()
+                    Start = new ImuStart()
                     {
                         DataTypes = (uint)ImuDataType.Accelerometer,    // ImuDataType are enum flags - logically 'OR' to combine several types
                         Odr = 50,                                       // Output Data Rate [Hz]
                         AccFsr = 4,                                     // Acceleromenter Full Scale Range [g]
                         GyroFsr = 500                                   // Gyroscope Full Scale Range [deg/sec]
                     }
-                }
-            };
-
-            await SendOrThrow(msg);
-        }
-
-        private async Task StartImu()
-        {
-            UplinkMessage msg = new UplinkMessage()
-            {
-                Imu = new ImuCommand()
-                {
-                    Start = true
                 }
             };
 

@@ -35,16 +35,16 @@ namespace Bluetera {
             "ZWxlcmF0aW9uUGF5bG9hZEgAEjQKCnF1YXRlcm5pb24YAiABKAsyHi5ibHVl",
             "dGVyYS5JbXVRdWF0ZXJuaW9uUGF5bG9hZEgAEiAKBWVycm9yGBAgASgLMg8u",
             "Ymx1ZXRlcmEuRXJyb3JIABIlCgRlY2hvGBEgASgLMhUuYmx1ZXRlcmEuRWNo",
-            "b1BheWxvYWRIAEIJCgdwYXlsb2FkIk8KCUltdUNvbmZpZxISCgpkYXRhX3R5",
-            "cGVzGAEgASgHEgsKA29kchgCIAEoDRIPCgdhY2NfZnNyGAMgASgNEhAKCGd5",
-            "cm9fZnNyGAQgASgNIl8KCkltdUNvbW1hbmQSDwoFc3RhcnQYASABKAhIABIO",
-            "CgRzdG9wGAIgASgISAASJQoGY29uZmlnGAMgASgLMhMuYmx1ZXRlcmEuSW11",
-            "Q29uZmlnSABCCQoHcGF5bG9hZCJmCg1VcGxpbmtNZXNzYWdlEiMKA2ltdRgB",
-            "IAEoCzIULmJsdWV0ZXJhLkltdUNvbW1hbmRIABIlCgRlY2hvGBEgASgLMhUu",
-            "Ymx1ZXRlcmEuRWNob1BheWxvYWRIAEIJCgdwYXlsb2FkKjYKE0JsdWV0ZXJh",
-            "TW9kdWxlc1R5cGUSCgoGU1lTVEVNEAASBwoDSU1VEAESCgoGU0RDQVJEEAIq",
-            "RgoLSW11RGF0YVR5cGUSCwoHVU5LTk9XThAAEg4KClFVQVRFUk5JT04QARIR",
-            "Cg1BQ0NFTEVST01FVEVSEAISBwoDUkFXEARiBnByb3RvMw=="));
+            "b1BheWxvYWRIAEIJCgdwYXlsb2FkIk4KCEltdVN0YXJ0EhIKCmRhdGFfdHlw",
+            "ZXMYASABKAcSCwoDb2RyGAIgASgNEg8KB2FjY19mc3IYAyABKA0SEAoIZ3ly",
+            "b19mc3IYBCABKA0iTAoKSW11Q29tbWFuZBIjCgVzdGFydBgBIAEoCzISLmJs",
+            "dWV0ZXJhLkltdVN0YXJ0SAASDgoEc3RvcBgCIAEoCEgAQgkKB3BheWxvYWQi",
+            "ZgoNVXBsaW5rTWVzc2FnZRIjCgNpbXUYASABKAsyFC5ibHVldGVyYS5JbXVD",
+            "b21tYW5kSAASJQoEZWNobxgRIAEoCzIVLmJsdWV0ZXJhLkVjaG9QYXlsb2Fk",
+            "SABCCQoHcGF5bG9hZCo2ChNCbHVldGVyYU1vZHVsZXNUeXBlEgoKBlNZU1RF",
+            "TRAAEgcKA0lNVRABEgoKBlNEQ0FSRBACKkYKC0ltdURhdGFUeXBlEgsKB1VO",
+            "S05PV04QABIOCgpRVUFURVJOSU9OEAESEQoNQUNDRUxFUk9NRVRFUhACEgcK",
+            "A1JBVxAEYgZwcm90bzM="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { },
           new pbr::GeneratedClrTypeInfo(new[] {typeof(global::Bluetera.BlueteraModulesType), typeof(global::Bluetera.ImuDataType), }, new pbr::GeneratedClrTypeInfo[] {
@@ -53,8 +53,8 @@ namespace Bluetera {
             new pbr::GeneratedClrTypeInfo(typeof(global::Bluetera.ImuAccelerationPayload), global::Bluetera.ImuAccelerationPayload.Parser, new[]{ "Timestamp", "X", "Y", "Z" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Bluetera.ImuQuaternionPayload), global::Bluetera.ImuQuaternionPayload.Parser, new[]{ "Timestamp", "W", "X", "Y", "Z" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Bluetera.DownlinkMessage), global::Bluetera.DownlinkMessage.Parser, new[]{ "Acceleration", "Quaternion", "Error", "Echo" }, new[]{ "Payload" }, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Bluetera.ImuConfig), global::Bluetera.ImuConfig.Parser, new[]{ "DataTypes", "Odr", "AccFsr", "GyroFsr" }, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Bluetera.ImuCommand), global::Bluetera.ImuCommand.Parser, new[]{ "Start", "Stop", "Config" }, new[]{ "Payload" }, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Bluetera.ImuStart), global::Bluetera.ImuStart.Parser, new[]{ "DataTypes", "Odr", "AccFsr", "GyroFsr" }, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Bluetera.ImuCommand), global::Bluetera.ImuCommand.Parser, new[]{ "Start", "Stop" }, new[]{ "Payload" }, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Bluetera.UplinkMessage), global::Bluetera.UplinkMessage.Parser, new[]{ "Imu", "Echo" }, new[]{ "Payload" }, null, null)
           }));
     }
@@ -357,7 +357,7 @@ namespace Bluetera {
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
             break;
           case 8: {
-            module_ = (global::Bluetera.BlueteraModulesType) input.ReadEnum();
+            Module = (global::Bluetera.BlueteraModulesType) input.ReadEnum();
             break;
           }
           case 16: {
@@ -1112,11 +1112,11 @@ namespace Bluetera {
 
   }
 
-  public sealed partial class ImuConfig : pb::IMessage<ImuConfig> {
-    private static readonly pb::MessageParser<ImuConfig> _parser = new pb::MessageParser<ImuConfig>(() => new ImuConfig());
+  public sealed partial class ImuStart : pb::IMessage<ImuStart> {
+    private static readonly pb::MessageParser<ImuStart> _parser = new pb::MessageParser<ImuStart>(() => new ImuStart());
     private pb::UnknownFieldSet _unknownFields;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public static pb::MessageParser<ImuConfig> Parser { get { return _parser; } }
+    public static pb::MessageParser<ImuStart> Parser { get { return _parser; } }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
@@ -1129,14 +1129,14 @@ namespace Bluetera {
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public ImuConfig() {
+    public ImuStart() {
       OnConstruction();
     }
 
     partial void OnConstruction();
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public ImuConfig(ImuConfig other) : this() {
+    public ImuStart(ImuStart other) : this() {
       dataTypes_ = other.dataTypes_;
       odr_ = other.odr_;
       accFsr_ = other.accFsr_;
@@ -1145,8 +1145,8 @@ namespace Bluetera {
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public ImuConfig Clone() {
-      return new ImuConfig(this);
+    public ImuStart Clone() {
+      return new ImuStart(this);
     }
 
     /// <summary>Field number for the "data_types" field.</summary>
@@ -1195,11 +1195,11 @@ namespace Bluetera {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override bool Equals(object other) {
-      return Equals(other as ImuConfig);
+      return Equals(other as ImuStart);
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public bool Equals(ImuConfig other) {
+    public bool Equals(ImuStart other) {
       if (ReferenceEquals(other, null)) {
         return false;
       }
@@ -1276,7 +1276,7 @@ namespace Bluetera {
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public void MergeFrom(ImuConfig other) {
+    public void MergeFrom(ImuStart other) {
       if (other == null) {
         return;
       }
@@ -1352,13 +1352,10 @@ namespace Bluetera {
     public ImuCommand(ImuCommand other) : this() {
       switch (other.PayloadCase) {
         case PayloadOneofCase.Start:
-          Start = other.Start;
+          Start = other.Start.Clone();
           break;
         case PayloadOneofCase.Stop:
           Stop = other.Stop;
-          break;
-        case PayloadOneofCase.Config:
-          Config = other.Config.Clone();
           break;
       }
 
@@ -1373,11 +1370,11 @@ namespace Bluetera {
     /// <summary>Field number for the "start" field.</summary>
     public const int StartFieldNumber = 1;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public bool Start {
-      get { return payloadCase_ == PayloadOneofCase.Start ? (bool) payload_ : false; }
+    public global::Bluetera.ImuStart Start {
+      get { return payloadCase_ == PayloadOneofCase.Start ? (global::Bluetera.ImuStart) payload_ : null; }
       set {
         payload_ = value;
-        payloadCase_ = PayloadOneofCase.Start;
+        payloadCase_ = value == null ? PayloadOneofCase.None : PayloadOneofCase.Start;
       }
     }
 
@@ -1392,24 +1389,12 @@ namespace Bluetera {
       }
     }
 
-    /// <summary>Field number for the "config" field.</summary>
-    public const int ConfigFieldNumber = 3;
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public global::Bluetera.ImuConfig Config {
-      get { return payloadCase_ == PayloadOneofCase.Config ? (global::Bluetera.ImuConfig) payload_ : null; }
-      set {
-        payload_ = value;
-        payloadCase_ = value == null ? PayloadOneofCase.None : PayloadOneofCase.Config;
-      }
-    }
-
     private object payload_;
     /// <summary>Enum of possible cases for the "payload" oneof.</summary>
     public enum PayloadOneofCase {
       None = 0,
       Start = 1,
       Stop = 2,
-      Config = 3,
     }
     private PayloadOneofCase payloadCase_ = PayloadOneofCase.None;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -1436,9 +1421,8 @@ namespace Bluetera {
       if (ReferenceEquals(other, this)) {
         return true;
       }
-      if (Start != other.Start) return false;
+      if (!object.Equals(Start, other.Start)) return false;
       if (Stop != other.Stop) return false;
-      if (!object.Equals(Config, other.Config)) return false;
       if (PayloadCase != other.PayloadCase) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
@@ -1448,7 +1432,6 @@ namespace Bluetera {
       int hash = 1;
       if (payloadCase_ == PayloadOneofCase.Start) hash ^= Start.GetHashCode();
       if (payloadCase_ == PayloadOneofCase.Stop) hash ^= Stop.GetHashCode();
-      if (payloadCase_ == PayloadOneofCase.Config) hash ^= Config.GetHashCode();
       hash ^= (int) payloadCase_;
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
@@ -1464,16 +1447,12 @@ namespace Bluetera {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public void WriteTo(pb::CodedOutputStream output) {
       if (payloadCase_ == PayloadOneofCase.Start) {
-        output.WriteRawTag(8);
-        output.WriteBool(Start);
+        output.WriteRawTag(10);
+        output.WriteMessage(Start);
       }
       if (payloadCase_ == PayloadOneofCase.Stop) {
         output.WriteRawTag(16);
         output.WriteBool(Stop);
-      }
-      if (payloadCase_ == PayloadOneofCase.Config) {
-        output.WriteRawTag(26);
-        output.WriteMessage(Config);
       }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
@@ -1484,13 +1463,10 @@ namespace Bluetera {
     public int CalculateSize() {
       int size = 0;
       if (payloadCase_ == PayloadOneofCase.Start) {
-        size += 1 + 1;
+        size += 1 + pb::CodedOutputStream.ComputeMessageSize(Start);
       }
       if (payloadCase_ == PayloadOneofCase.Stop) {
         size += 1 + 1;
-      }
-      if (payloadCase_ == PayloadOneofCase.Config) {
-        size += 1 + pb::CodedOutputStream.ComputeMessageSize(Config);
       }
       if (_unknownFields != null) {
         size += _unknownFields.CalculateSize();
@@ -1505,16 +1481,13 @@ namespace Bluetera {
       }
       switch (other.PayloadCase) {
         case PayloadOneofCase.Start:
-          Start = other.Start;
+          if (Start == null) {
+            Start = new global::Bluetera.ImuStart();
+          }
+          Start.MergeFrom(other.Start);
           break;
         case PayloadOneofCase.Stop:
           Stop = other.Stop;
-          break;
-        case PayloadOneofCase.Config:
-          if (Config == null) {
-            Config = new global::Bluetera.ImuConfig();
-          }
-          Config.MergeFrom(other.Config);
           break;
       }
 
@@ -1529,21 +1502,17 @@ namespace Bluetera {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
             break;
-          case 8: {
-            Start = input.ReadBool();
+          case 10: {
+            global::Bluetera.ImuStart subBuilder = new global::Bluetera.ImuStart();
+            if (payloadCase_ == PayloadOneofCase.Start) {
+              subBuilder.MergeFrom(Start);
+            }
+            input.ReadMessage(subBuilder);
+            Start = subBuilder;
             break;
           }
           case 16: {
             Stop = input.ReadBool();
-            break;
-          }
-          case 26: {
-            global::Bluetera.ImuConfig subBuilder = new global::Bluetera.ImuConfig();
-            if (payloadCase_ == PayloadOneofCase.Config) {
-              subBuilder.MergeFrom(Config);
-            }
-            input.ReadMessage(subBuilder);
-            Config = subBuilder;
             break;
           }
         }

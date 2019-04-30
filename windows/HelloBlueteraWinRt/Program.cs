@@ -74,7 +74,7 @@ namespace HelloBlueteraWinRt
                     case 'i':
                         {
                             Console.WriteLine("Configuring and starting IMU");
-                            var result = ConfigureAndStartImu().Result;
+                            var result = StartImu().Result;
                             Console.WriteLine($"GattCommunicationStatus: {result}");
                         }
                         break;
@@ -135,37 +135,25 @@ namespace HelloBlueteraWinRt
             return await device.SendMessage(msg);
         }
 
-        private static async Task<GattCommunicationStatus> ConfigureAndStartImu()
+        private static async Task<GattCommunicationStatus> StartImu()
         {
             GattCommunicationStatus status;
 
-            // configure
-            UplinkMessage configImuMsg = new UplinkMessage()
+            UplinkMessage msg = new UplinkMessage()
             {
                 Imu = new ImuCommand
                 {
-                    Config = new ImuConfig()
+                    Start = new ImuStart()
                     {
-                        DataTypes = (uint)ImuDataType.Accelerometer,    // ImuDataType are enum flags - logically 'OR' to combine several types
+                        DataTypes = (uint)ImuDataType.Quaternion,    // ImuDataType are enum flags - logically 'OR' to combine several types
                         Odr = 50,                                       // Output Data Rate [Hz]
                         AccFsr = 4,                                     // Acceleromenter Full Scale Range [g]
                         GyroFsr = 500                                   // Gyroscope Full Scale Range [deg/sec]
                     }
                 }
             };
-            status = await device.SendMessage(configImuMsg);
-            if (status != GattCommunicationStatus.Success)
-                return status;
-
-            // start
-            UplinkMessage startImuMsg = new UplinkMessage()
-            {
-                Imu = new ImuCommand()
-                {
-                    Start = true
-                }
-            };
-            return await device.SendMessage(startImuMsg);
+            
+            return await device.SendMessage(msg);
         }
 
         private static async Task<GattCommunicationStatus> StopImu()
