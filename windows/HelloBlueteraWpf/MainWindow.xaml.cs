@@ -98,7 +98,7 @@ namespace HelloBlueteraWpf
                     ApplicationState = ApplicationStateType.Connecting;
 
                     // Try connecting to Bluetera                    
-                    _bluetera = await _sdk.Connect(args.BluetoothAddress);  // This method will either connect or throw
+                    _bluetera = await _sdk.Connect(args.BluetoothAddress, true);  // This method will either connect or throw
                     _bluetera.ConnectionStatusChanged += _bluetera_ConnectionStatusChanged;
                     _bluetera.DownlinkMessageReceived += _bluetera_DownlinkMessageReceived;
 

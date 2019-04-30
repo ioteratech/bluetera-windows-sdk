@@ -141,10 +141,17 @@ namespace Bluetera
                 _rxChar = await GetCharacteristicAsync(_service, BlueteraConstants.BusRxCharUuid);
                 _txChar = await GetCharacteristicAsync(_service, BlueteraConstants.BusTxCharUuid);
                 _txChar.ValueChanged += _txChar_ValueChanged;
-                await _txChar.WriteClientCharacteristicConfigurationDescriptorAsync(GattClientCharacteristicConfigurationDescriptorValue.Notify);
+                var gattStatus = await _txChar.WriteClientCharacteristicConfigurationDescriptorAsync(GattClientCharacteristicConfigurationDescriptorValue.Notify);
+
+                if (gattStatus != GattCommunicationStatus.Success)
+                    throw new BlueteraException("Failed to enable notifications");
 
                 // start watching for device connection/disconnection
                 BaseDevice.ConnectionStatusChanged += _baseDevice_ConnectionStatusChanged;
+            }
+            catch(BlueteraException)
+            {
+                throw;
             }
             catch(Exception ex)
             {
