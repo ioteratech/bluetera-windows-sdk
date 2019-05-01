@@ -206,4 +206,4 @@ gallery.xml
 project.lock.json
 
 # protobuf auto-generated
-winrt/BlueteraMessages.cs
+*/BlueteraMessages.cs
