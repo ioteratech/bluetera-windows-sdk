@@ -70,6 +70,7 @@
   <Import Project="..\BlueteraSdk\BlueteraSdk.projitems" Label="Shared" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PreBuildEvent>protoc -I=$(ProjectDir)/../../protobuf --csharp_out=$(ProjectDir) $(ProjectDir)/../../protobuf/bluetera_messages.proto</PreBuildEvent>
+    <PreBuildEvent>
+    </PreBuildEvent>
   </PropertyGroup>
 </Project>
