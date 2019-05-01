@@ -43,6 +43,7 @@ namespace HelloBlueteraWpf
             _sdk.AdvertismentReceived += _sdk_AdvertismentReceived;
 
             ApplicationState = ApplicationStateType.Idle;
+            UpdateControls();
         }
         #endregion
 
@@ -62,21 +63,59 @@ namespace HelloBlueteraWpf
             get { return _applicationState; }
             set { _applicationState = value; NotifyPropertyChanged(); }
         }
-        #endregion
+        #endregion       
 
         #region Event handlers
-        private void StartButton_Click(object sender, RoutedEventArgs e)
+        private void StartStopButton_Click(object sender, RoutedEventArgs e)
         {
-            ApplicationState = ApplicationStateType.Scanning;
-            _sdk.StartScan();
+            if ((ApplicationState == ApplicationStateType.Idle) || (ApplicationState == ApplicationStateType.Error))
+            {   // Button is 'Start'
+                _sdk.StartScan();
+
+                // Update UI
+                ApplicationState = ApplicationStateType.Scanning;
+                UpdateControls();
+            }
+            else
+            {   // Button is 'Stop' - depending on the state, it either: stops scanning, disconnects, aborts connection attempt
+                // It is OK to call StopScan(), even if we are not scanning
+                StopAll();
+            }
         }
 
         private void ResetCubeButton_Click(object sender, RoutedEventArgs e)
         {
+            // Capture last reeived Quaternion as initial rotation
             _q0 = _qt;
             _q0.Normalize();
             _q0.Invert();
         }
+
+        #region Helpers
+        private void UpdateControls()
+        {
+            switch(ApplicationState)
+            {
+                case ApplicationStateType.Idle:
+                case ApplicationStateType.Error:
+                    StartStopButton.Content = "Start";
+                    DeviceLabel.Content = "";
+                    break;
+
+                case ApplicationStateType.Scanning:
+                case ApplicationStateType.Connecting:                
+                    StartStopButton.Content = "Stop";
+                    DeviceLabel.Content = "";
+                    break;
+                
+                case ApplicationStateType.Connected:
+                case ApplicationStateType.Disconnecting:
+                    StartStopButton.Content = "Stop";
+                    DeviceLabel.Content = _bluetera?.AddressAsString;
+                    break;
+            }
+        }
+        #endregion
         #endregion
         #endregion
 
@@ -98,6 +137,7 @@ namespace HelloBlueteraWpf
                     _sdk.StopScan();
 
                     ApplicationState = ApplicationStateType.Connecting;
+                    UpdateControls();
 
                     // Try connecting to Bluetera                    
                     _bluetera = await _sdk.Connect(args.BluetoothAddress, true);  // This method will either connect or throw
@@ -105,7 +145,7 @@ namespace HelloBlueteraWpf
                     _bluetera.DownlinkMessageReceived += _bluetera_DownlinkMessageReceived;
 
                     ApplicationState = ApplicationStateType.Connected;
-                    DeviceLabel.Content = _bluetera.AddressAsString;
+                    UpdateControls();
 
                     // Start IMU. Methods will throw on failure
                     await StartImu();
@@ -119,6 +159,7 @@ namespace HelloBlueteraWpf
                     }
 
                     ApplicationState = ApplicationStateType.Error;
+                    UpdateControls();
                 }
             });
         }
@@ -138,14 +179,11 @@ namespace HelloBlueteraWpf
                     {
                         await StartImu();
                         ApplicationState = ApplicationStateType.Connected;
-                        DeviceLabel.Content = _bluetera.AddressAsString;
+                        UpdateControls();
                     }
                     else
                     {
-                        _bluetera.Dispose();
-                        _bluetera = null;
-                        ApplicationState = ApplicationStateType.Idle;
-                        DeviceLabel.Content = null;
+                        StopAll();  // This will prevent auto-reconnection
                     }
                 }
                 catch (BlueteraException)
@@ -174,6 +212,26 @@ namespace HelloBlueteraWpf
                         break;
                 }
             });
+        }
+
+        private void StopAll()
+        {
+            try
+            {
+                // Stop scanning - will be ignored if not relevant
+                _sdk.StopScan();            
+
+                // Dispose Bluetera device. Will disconnect if needed
+                if (_bluetera != null)
+                {
+                    _bluetera.Dispose();
+                    _bluetera = null;
+                }
+            }
+            catch (Exception) { /* Ignore */}
+
+            ApplicationState = ApplicationStateType.Idle;
+            UpdateControls();
         }
         #endregion
 
