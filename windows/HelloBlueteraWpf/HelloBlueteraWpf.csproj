@@ -108,29 +108,39 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="images\berries.jpg">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="images\branches.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Resource Include="images\leafpicturecube2r000003.png" />
-    <Resource Include="images\leafpicturecube2r000005.png" />
-    <Content Include="images\leaves_closeup.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Resource Include="images\rippled_metal_smaller.png" />
-    <Resource Include="images\rocks.jpg" />
-    <Content Include="images\rocks.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="images\sunset.jpg">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Resource Include="images\waterlilies.jpg" />
-    <Content Include="images\waterlilies.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
+    <Resource Include="..\..\resources\images\berries.jpg">
+      <Link>images\berries.jpg</Link>
+    </Resource>
+    <Resource Include="..\..\resources\images\branches.png">
+      <Link>images\branches.png</Link>
+    </Resource>
+    <Resource Include="..\..\resources\images\leafpicturecube2r000003.png">
+      <Link>images\leafpicturecube2r000003.png</Link>
+    </Resource>
+    <Resource Include="..\..\resources\images\leafpicturecube2r000005.png">
+      <Link>images\leafpicturecube2r000005.png</Link>
+    </Resource>
+    <Resource Include="..\..\resources\images\leaves_closeup.png">
+      <Link>images\leaves_closeup.png</Link>
+    </Resource>
+    <Resource Include="..\..\resources\images\rippled_metal_smaller.png">
+      <Link>images\rippled_metal_smaller.png</Link>
+    </Resource>
+    <Resource Include="..\..\resources\images\rocks.jpg">
+      <Link>images\rocks.jpg</Link>
+    </Resource>
+    <Resource Include="..\..\resources\images\rocks.png">
+      <Link>images\rocks.png</Link>
+    </Resource>
+    <Resource Include="..\..\resources\images\sunset.jpg">
+      <Link>images\sunset.jpg</Link>
+    </Resource>
+    <Resource Include="..\..\resources\images\waterlilies.jpg">
+      <Link>images\waterlilies.jpg</Link>
+    </Resource>
+    <Resource Include="..\..\resources\images\waterlilies.png">
+      <Link>images\waterlilies.png</Link>
+    </Resource>
   </ItemGroup>
   <Import Project="..\BlueteraSdk\BlueteraSdk.projitems" Label="Shared" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
