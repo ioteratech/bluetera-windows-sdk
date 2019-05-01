@@ -44,6 +44,11 @@ namespace Bluetera
         {
             get { return BlueteraUtilities.UlongAddressAsString(Address); }
         }
+
+        public bool IsConnected
+        {
+            get { return (BaseDevice.ConnectionStatus == BluetoothConnectionStatus.Connected); }
+        }
         #endregion
 
         #region Events
@@ -65,6 +70,14 @@ namespace Bluetera
             {
                 throw new ArgumentException("Invalid UplinkMessage");
             }
+        }
+
+        public void Disconnect()
+        {
+            // Windows does not have a 'Disconnect' method per-se. The way to prevent the device from auto-connecting is to dispose it and any services it holds
+            // See https://social.msdn.microsoft.com/Forums/windowsdesktop/en-US/9eae39ff-f6ca-4aa9-adaf-97450f2b4a6c/disconnect-bluetooth-low-energy?forum=wdk
+
+            Dispose();
         }
         #endregion
 

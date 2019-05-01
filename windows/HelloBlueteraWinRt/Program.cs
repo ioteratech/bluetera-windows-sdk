@@ -60,7 +60,11 @@ namespace HelloBlueteraWinRt
 
                     case 'd':
                         Console.WriteLine("Disconnecting");
-                        sdk.Disconnect(device);
+                        if (device != null)
+                        {
+                            device.Disconnect();
+                            device = null;
+                        }
                         break;
 
                     case 'e':

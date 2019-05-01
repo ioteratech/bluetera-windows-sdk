@@ -357,7 +357,7 @@ namespace Bluetera {
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
             break;
           case 8: {
-            Module = (global::Bluetera.BlueteraModulesType) input.ReadEnum();
+            module_ = (global::Bluetera.BlueteraModulesType) input.ReadEnum();
             break;
           }
           case 16: {
