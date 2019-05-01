@@ -141,8 +141,6 @@ namespace HelloBlueteraWinRt
 
         private static async Task<GattCommunicationStatus> StartImu()
         {
-            GattCommunicationStatus status;
-
             UplinkMessage msg = new UplinkMessage()
             {
                 Imu = new ImuCommand

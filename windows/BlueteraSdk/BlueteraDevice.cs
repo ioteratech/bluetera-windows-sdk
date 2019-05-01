@@ -94,7 +94,7 @@ namespace Bluetera
 
                 ConnectionStatusChanged?.Invoke(this, sender.ConnectionStatus);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 /* Currently ignore */
             }
