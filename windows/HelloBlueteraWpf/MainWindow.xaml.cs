@@ -74,6 +74,8 @@ namespace HelloBlueteraWpf
         private void ResetCubeButton_Click(object sender, RoutedEventArgs e)
         {
             _q0 = _qt;
+            _q0.Normalize();
+            _q0.Invert();
         }
         #endregion
         #endregion
@@ -162,8 +164,8 @@ namespace HelloBlueteraWpf
                     case DownlinkMessage.PayloadOneofCase.Quaternion:
                         {
                             // apply rotation
-                            _qt = new Quaternion(args.Quaternion.X, args.Quaternion.Y, args.Quaternion.Z, args.Quaternion.W);
-                            CubeModel.Transform = new RotateTransform3D(new QuaternionRotation3D(_qt));
+                            _qt = new Quaternion(args.Quaternion.X, args.Quaternion.Y, args.Quaternion.Z, args.Quaternion.W);                            
+                            CubeModel.Transform = new RotateTransform3D(new QuaternionRotation3D(_q0 * _qt));
                         }
                         break;
 
@@ -185,7 +187,7 @@ namespace HelloBlueteraWpf
                 {
                     Start = new ImuStart()
                     {
-                        DataTypes = (uint)ImuDataType.Accelerometer,    // ImuDataType are enum flags - logically 'OR' to combine several types
+                        DataTypes = (uint)ImuDataType.Quaternion,       // ImuDataType are enum flags - logically 'OR' to combine several types
                         Odr = 50,                                       // Output Data Rate [Hz]
                         AccFsr = 4,                                     // Acceleromenter Full Scale Range [g]
                         GyroFsr = 500                                   // Gyroscope Full Scale Range [deg/sec]
