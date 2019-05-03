@@ -5,9 +5,10 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:HelloBlueteraWpf"
+        xmlns:lvc="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
         mc:Ignorable="d"
         Title="Hello Bluetera - WPF"
-        Width="600"
+        Width="740"
         SizeToContent="Height">
     <Window.Background>
         <LinearGradientBrush StartPoint="0.5,0" EndPoint="0.5,1">
@@ -19,62 +20,82 @@
         </LinearGradientBrush>
     </Window.Background>
     <StackPanel Orientation="Vertical">
-        <Viewbox ClipToBounds="True" Width="400" Height="400">
-            <Viewport3D  ClipToBounds="True" Width="300" Height="200">
-                <Viewport3D.Camera>
-                    <PerspectiveCamera x:Name="myPerspectiveCamera" FarPlaneDistance="15"  LookDirection="0,0,-1" UpDirection="0,1,0" NearPlaneDistance="1" Position="0,0,3" FieldOfView="50"/>
-                </Viewport3D.Camera>
-                <ModelVisual3D x:Name="CubeModel">
-                    <ModelVisual3D.Children>
-                        <ModelVisual3D>
-                            <ModelVisual3D.Content>
-                                <AmbientLight Color="#333333" />
-                            </ModelVisual3D.Content>
-                        </ModelVisual3D>
-                        <ModelVisual3D>
-                            <ModelVisual3D.Content>
-                                <DirectionalLight Color="#FFFFFF" Direction="-0.612372,-0.5,-0.612372" />
-                            </ModelVisual3D.Content>
-                        </ModelVisual3D>
-                        <ModelVisual3D>
-                            <ModelVisual3D.Content>
-                                <DirectionalLight Color="#FFFFFF" Direction="0.612372,-0.5,-0.612372" />
-                            </ModelVisual3D.Content>
-                        </ModelVisual3D>
-                        <ModelVisual3D>
-                            <ModelVisual3D.Content>
-                                <GeometryModel3D Geometry="{StaticResource CubeSide01}" Material="{StaticResource BranchesMaterial}"/>
-                            </ModelVisual3D.Content>
-                        </ModelVisual3D>
-                        <ModelVisual3D>
-                            <ModelVisual3D.Content>
-                                <GeometryModel3D Geometry="{StaticResource CubeSide02}" Material="{StaticResource FlowersMaterial}"/>
-                            </ModelVisual3D.Content>
-                        </ModelVisual3D>
-                        <ModelVisual3D>
-                            <ModelVisual3D.Content>
-                                <GeometryModel3D Geometry="{StaticResource CubeSide03}" Material="{StaticResource BerriesMaterial}"/>
-                            </ModelVisual3D.Content>
-                        </ModelVisual3D>
-                        <ModelVisual3D>
-                            <ModelVisual3D.Content>
-                                <GeometryModel3D Geometry="{StaticResource CubeSide04}" Material="{StaticResource LeavesMaterial1}"/>
-                            </ModelVisual3D.Content>
-                        </ModelVisual3D>
-                        <ModelVisual3D>
-                            <ModelVisual3D.Content>
-                                <GeometryModel3D Geometry="{StaticResource CubeSide05}" Material="{StaticResource RocksMaterial}"/>
-                            </ModelVisual3D.Content>
-                        </ModelVisual3D>
-                        <ModelVisual3D>
-                            <ModelVisual3D.Content>
-                                <GeometryModel3D Geometry="{StaticResource CubeSide06}" Material="{StaticResource SunsetMaterial}"/>
-                            </ModelVisual3D.Content>
-                        </ModelVisual3D>
-                    </ModelVisual3D.Children>
-                </ModelVisual3D>
-            </Viewport3D>
-        </Viewbox>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <Viewbox Grid.Column="0" ClipToBounds="True" Width="400" Height="400">
+                <Viewport3D  ClipToBounds="True" Width="300" Height="200">
+                    <Viewport3D.Camera>
+                        <PerspectiveCamera x:Name="myPerspectiveCamera" FarPlaneDistance="15"  LookDirection="0,0,-1" UpDirection="0,1,0" NearPlaneDistance="1" Position="0,0,3" FieldOfView="50"/>
+                    </Viewport3D.Camera>
+                    <ModelVisual3D x:Name="CubeModel">
+                        <ModelVisual3D.Children>
+                            <ModelVisual3D>
+                                <ModelVisual3D.Content>
+                                    <AmbientLight Color="#333333" />
+                                </ModelVisual3D.Content>
+                            </ModelVisual3D>
+                            <ModelVisual3D>
+                                <ModelVisual3D.Content>
+                                    <DirectionalLight Color="#FFFFFF" Direction="-0.612372,-0.5,-0.612372" />
+                                </ModelVisual3D.Content>
+                            </ModelVisual3D>
+                            <ModelVisual3D>
+                                <ModelVisual3D.Content>
+                                    <DirectionalLight Color="#FFFFFF" Direction="0.612372,-0.5,-0.612372" />
+                                </ModelVisual3D.Content>
+                            </ModelVisual3D>
+                            <ModelVisual3D>
+                                <ModelVisual3D.Content>
+                                    <GeometryModel3D Geometry="{StaticResource CubeSide01}" Material="{StaticResource BranchesMaterial}"/>
+                                </ModelVisual3D.Content>
+                            </ModelVisual3D>
+                            <ModelVisual3D>
+                                <ModelVisual3D.Content>
+                                    <GeometryModel3D Geometry="{StaticResource CubeSide02}" Material="{StaticResource FlowersMaterial}"/>
+                                </ModelVisual3D.Content>
+                            </ModelVisual3D>
+                            <ModelVisual3D>
+                                <ModelVisual3D.Content>
+                                    <GeometryModel3D Geometry="{StaticResource CubeSide03}" Material="{StaticResource BerriesMaterial}"/>
+                                </ModelVisual3D.Content>
+                            </ModelVisual3D>
+                            <ModelVisual3D>
+                                <ModelVisual3D.Content>
+                                    <GeometryModel3D Geometry="{StaticResource CubeSide04}" Material="{StaticResource LeavesMaterial1}"/>
+                                </ModelVisual3D.Content>
+                            </ModelVisual3D>
+                            <ModelVisual3D>
+                                <ModelVisual3D.Content>
+                                    <GeometryModel3D Geometry="{StaticResource CubeSide05}" Material="{StaticResource RocksMaterial}"/>
+                                </ModelVisual3D.Content>
+                            </ModelVisual3D>
+                            <ModelVisual3D>
+                                <ModelVisual3D.Content>
+                                    <GeometryModel3D Geometry="{StaticResource CubeSide06}" Material="{StaticResource SunsetMaterial}"/>
+                                </ModelVisual3D.Content>
+                            </ModelVisual3D>
+                        </ModelVisual3D.Children>
+                    </ModelVisual3D>
+                </Viewport3D>
+            </Viewbox>
+            <lvc:CartesianChart Grid.Column="1" Name="AccelerationChart" DisableAnimations="True" DataTooltip="{x:Null}" Hoverable="False" Width="200" Height="200">
+                <lvc:CartesianChart.Series>
+                    <lvc:LineSeries Values="{Binding AccelerationValues_X}" Fill="Transparent" LineSmoothness="0.5" PointGeometry="" ScalesYAt="0" Title="X" Stroke="DodgerBlue"/>
+                    <lvc:LineSeries Values="{Binding AccelerationValues_Y}" Fill="Transparent" LineSmoothness="0.5" PointGeometry="" ScalesYAt="0" Title="Y" Stroke="OrangeRed"/>
+                    <lvc:LineSeries Values="{Binding AccelerationValues_Z}" Fill="Transparent" LineSmoothness="0.5" PointGeometry="" ScalesYAt="0" Title="Z" Stroke="LawnGreen"/>
+                </lvc:CartesianChart.Series>
+                <lvc:CartesianChart.AxisX>
+                    <lvc:Axis MaxValue="100" ShowLabels="False">
+                        <lvc:Axis.Separator>
+                            <lvc:Separator Stroke="Transparent"/>
+                        </lvc:Axis.Separator>
+                    </lvc:Axis>
+                </lvc:CartesianChart.AxisX>
+            </lvc:CartesianChart>
+        </Grid>
         <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition />

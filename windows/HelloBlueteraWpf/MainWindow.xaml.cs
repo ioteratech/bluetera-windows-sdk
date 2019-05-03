@@ -18,6 +18,7 @@ using Windows.Devices.Bluetooth.Advertisement;
 using Bluetera.Utilities;
 using Windows.Devices.Bluetooth;
 using Windows.Devices.Bluetooth.GenericAttributeProfile;
+using LiveCharts;
 
 namespace HelloBlueteraWpf
 {
@@ -31,6 +32,10 @@ namespace HelloBlueteraWpf
         public MainWindow()
         {
             InitializeComponent();
+
+            AccelerationValues_X = new ChartValues<double>();
+            AccelerationValues_Y = new ChartValues<double>();
+            AccelerationValues_Z = new ChartValues<double>();
 
             DataContext = this;
         }
@@ -63,7 +68,11 @@ namespace HelloBlueteraWpf
             get { return _applicationState; }
             set { _applicationState = value; NotifyPropertyChanged(); }
         }
-        #endregion       
+
+        public ChartValues<double> AccelerationValues_X { get; set; }
+        public ChartValues<double> AccelerationValues_Y { get; set; }
+        public ChartValues<double> AccelerationValues_Z { get; set; }
+        #endregion
 
         #region Event handlers
         private void StartStopButton_Click(object sender, RoutedEventArgs e)
@@ -94,7 +103,7 @@ namespace HelloBlueteraWpf
         #region Helpers
         private void UpdateControls()
         {
-            switch(ApplicationState)
+            switch (ApplicationState)
             {
                 case ApplicationStateType.Idle:
                 case ApplicationStateType.Error:
@@ -103,11 +112,11 @@ namespace HelloBlueteraWpf
                     break;
 
                 case ApplicationStateType.Scanning:
-                case ApplicationStateType.Connecting:                
+                case ApplicationStateType.Connecting:
                     StartStopButton.Content = "Stop";
                     DeviceLabel.Content = "";
                     break;
-                
+
                 case ApplicationStateType.Connected:
                 case ApplicationStateType.Disconnecting:
                     StartStopButton.Content = "Stop";
@@ -193,6 +202,7 @@ namespace HelloBlueteraWpf
             });
         }
 
+        static int foo = 0;
         private void _bluetera_DownlinkMessageReceived(BlueteraDevice sender, DownlinkMessage args)
         {
             Dispatcher.Invoke(() =>
@@ -202,13 +212,20 @@ namespace HelloBlueteraWpf
                     case DownlinkMessage.PayloadOneofCase.Quaternion:
                         {
                             // apply rotation
-                            _qt = new Quaternion(args.Quaternion.X, args.Quaternion.Y, args.Quaternion.Z, args.Quaternion.W);                            
+                            _qt = new Quaternion(args.Quaternion.X, args.Quaternion.Y, args.Quaternion.Z, args.Quaternion.W);
                             CubeModel.Transform = new RotateTransform3D(new QuaternionRotation3D(_q0 * _qt));
                         }
                         break;
 
                     case DownlinkMessage.PayloadOneofCase.Acceleration:
-                        /* TODO */
+                        AccelerationValues_X.Add(args.Acceleration.X);
+                        if (AccelerationValues_X.Count > 100) AccelerationValues_X.RemoveAt(0);
+
+                        AccelerationValues_Y.Add(args.Acceleration.Y);
+                        if (AccelerationValues_Y.Count > 100) AccelerationValues_Y.RemoveAt(0);
+
+                        AccelerationValues_Z.Add(args.Acceleration.Z);
+                        if (AccelerationValues_Z.Count > 100) AccelerationValues_Z.RemoveAt(0);
                         break;
 
                     default:
@@ -223,7 +240,7 @@ namespace HelloBlueteraWpf
             try
             {
                 // Stop scanning - will be ignored if not relevant
-                _sdk.StopScan();            
+                _sdk.StopScan();
 
                 // Dispose Bluetera device. Will disconnect if needed
                 if (_bluetera != null)
@@ -240,7 +257,6 @@ namespace HelloBlueteraWpf
         #endregion
 
         #region Helpers
-
         private async Task StartImu()
         {
             UplinkMessage msg = new UplinkMessage()
@@ -250,7 +266,7 @@ namespace HelloBlueteraWpf
                     Start = new ImuStart()
                     {
                         DataTypes = (uint)(ImuDataType.Accelerometer | ImuDataType.Quaternion), // ImuDataType are enum flags - logically 'OR' to combine several types
-                        Odr = 50,                                                               // Output Data Rate [Hz]
+                        Odr = 20,                                                               // Output Data Rate [Hz] - see comment (1) at the end of this file before changing this value
                         AccFsr = 4,                                                             // Acceleromenter Full Scale Range [g]
                         GyroFsr = 500                                                           // Gyroscope Full Scale Range [deg/sec]
                     }
@@ -283,3 +299,13 @@ namespace HelloBlueteraWpf
         #endregion
     }
 }
+
+/*
+ * Comments:
+ * 
+ * 1. While Bluetera will happily stream Acceleration and Quaternion data at 200 samples/sec, some machines we tested choked on this (Windows 10 Pro, Version 10.0.17763).
+ *    To try out higher data rate, either disable Acceleration, buy a stronger machine, or wait until the issue is resolved.
+ *    If the machine does choke, the Bluetera will be disconnect, but you will not get a 'disconnect' event, and you will have to reset your adapter (Windows-->Settings-->Bluetooth)
+ * */
+
+
