@@ -145,7 +145,7 @@ namespace Bluetera
             BaseDevice = device;
         }
 
-        internal async Task Start()
+        internal async Task Connect()
         {            
             try
             {
@@ -162,13 +162,10 @@ namespace Bluetera
                 // start watching for device connection/disconnection
                 BaseDevice.ConnectionStatusChanged += _baseDevice_ConnectionStatusChanged;
             }
-            catch(BlueteraException)
+            catch(Exception)
             {
+                Dispose();
                 throw;
-            }
-            catch(Exception ex)
-            {
-                throw new BlueteraException("Failed to obtain Bluetera service - make sure the device has been paired", ex);
             }
         }
 

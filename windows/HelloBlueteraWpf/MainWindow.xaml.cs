@@ -166,7 +166,7 @@ namespace HelloBlueteraWpf
 
         private void _bluetera_ConnectionStatusChanged(BlueteraDevice sender, BluetoothConnectionStatus args)
         {
-            Dispatcher.InvokeAsync(async () =>
+            Dispatcher.Invoke(async () =>
             {
                 try
                 {
@@ -195,7 +195,7 @@ namespace HelloBlueteraWpf
 
         private void _bluetera_DownlinkMessageReceived(BlueteraDevice sender, DownlinkMessage args)
         {
-            Dispatcher.InvokeAsync(() =>
+            Dispatcher.Invoke(() =>
             {
                 switch (args.PayloadCase)
                 {

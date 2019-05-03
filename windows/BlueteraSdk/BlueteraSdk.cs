@@ -51,6 +51,8 @@ namespace Bluetera
 
         public async Task<BlueteraDevice> Connect(ulong addr, bool autopair = false)
         {
+            BlueteraDevice bluetera = null;
+
             // get device                        
             BluetoothLEDevice device = await BluetoothLEDevice.FromBluetoothAddressAsync(addr);
 
@@ -58,27 +60,23 @@ namespace Bluetera
             if (_connectedDevices.ContainsKey(device.BluetoothDeviceId.Id))
                 throw new InvalidOperationException();
 
-            BlueteraDevice bluetera = null;
-            if (device != null)
+            // create Bluetera wrapper
+            bluetera = new BlueteraDevice(device);
+            bluetera.ConnectionStatusChanged += _bluetera_ConnectionStatusChanged;
+
+            // non-UWP applications (console, WPF, etc.) should use the auto-pair with the device, or the pairing result will be 'RequiredHandlerNotRegistered'
+            // see e.g. https://stackoverflow.com/questions/45191412/deviceinformation-pairasync-not-working-in-wpf/45196036#45196036
+            if (autopair)
+                bluetera.BaseDevice.DeviceInformation.Pairing.Custom.PairingRequested += (sender, args) => { args.Accept(); };
+
+            var result = await bluetera.BaseDevice.DeviceInformation.Pairing.Custom.PairAsync(DevicePairingKinds.ConfirmOnly);
+            if ((result.Status == DevicePairingResultStatus.AlreadyPaired) || (result.Status == DevicePairingResultStatus.Paired))
             {
-                bluetera = new BlueteraDevice(device);
-                bluetera.ConnectionStatusChanged += _bluetera_ConnectionStatusChanged;
-
-                // non-UWP applications (console, WPF, etc.) should use the auto-pair with the device, or the pairing result will be 'RequiredHandlerNotRegistered'
-                // see e.g. https://stackoverflow.com/questions/45191412/deviceinformation-pairasync-not-working-in-wpf/45196036#45196036
-                if (autopair)
-                    bluetera.BaseDevice.DeviceInformation.Pairing.Custom.PairingRequested += (sender, args) => { args.Accept(); };
-
-                var result = await bluetera.BaseDevice.DeviceInformation.Pairing.Custom.PairAsync(DevicePairingKinds.ConfirmOnly);
-
-                if ((result.Status == DevicePairingResultStatus.AlreadyPaired) || (result.Status == DevicePairingResultStatus.Paired))
-                {
-                    await bluetera.Start();
-                }
-                else
-                {
-                    throw new BlueteraException($"Operation failed. Pairing result = {result.Status}");
-                }
+                await bluetera.Connect();
+            }
+            else
+            {
+                throw new BlueteraException($"Operation failed. Pairing result = {result.Status}");
             }
 
             return bluetera;
