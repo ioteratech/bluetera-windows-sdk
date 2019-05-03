@@ -207,6 +207,10 @@ namespace HelloBlueteraWpf
                         }
                         break;
 
+                    case DownlinkMessage.PayloadOneofCase.Acceleration:
+                        /* TODO */
+                        break;
+
                     default:
                         /* Currently ignore all other message types */
                         break;
@@ -245,10 +249,10 @@ namespace HelloBlueteraWpf
                 {
                     Start = new ImuStart()
                     {
-                        DataTypes = (uint)ImuDataType.Quaternion,       // ImuDataType are enum flags - logically 'OR' to combine several types
-                        Odr = 50,                                       // Output Data Rate [Hz]
-                        AccFsr = 4,                                     // Acceleromenter Full Scale Range [g]
-                        GyroFsr = 500                                   // Gyroscope Full Scale Range [deg/sec]
+                        DataTypes = (uint)(ImuDataType.Accelerometer | ImuDataType.Quaternion), // ImuDataType are enum flags - logically 'OR' to combine several types
+                        Odr = 50,                                                               // Output Data Rate [Hz]
+                        AccFsr = 4,                                                             // Acceleromenter Full Scale Range [g]
+                        GyroFsr = 500                                                           // Gyroscope Full Scale Range [deg/sec]
                     }
                 }
             };
