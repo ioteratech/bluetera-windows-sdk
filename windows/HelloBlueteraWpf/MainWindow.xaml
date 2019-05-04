@@ -9,15 +9,10 @@
         mc:Ignorable="d"
         Title="Hello Bluetera - WPF"
         Width="740"
+        Icon="iotera.ico"
         SizeToContent="Height">
     <Window.Background>
-        <LinearGradientBrush StartPoint="0.5,0" EndPoint="0.5,1">
-            <LinearGradientBrush.GradientStops>
-                <GradientStop Color="Black" Offset="0.2" />
-                <GradientStop Color="#333333" Offset="0.4" />
-                <GradientStop Color="Black" Offset="0.6" />
-            </LinearGradientBrush.GradientStops>
-        </LinearGradientBrush>
+        <ImageBrush ImageSource="images/iotera_full_logo.png" Stretch="Uniform" Opacity="0.5"/>
     </Window.Background>
     <StackPanel Orientation="Vertical">
         <Grid>
@@ -81,7 +76,7 @@
                     </ModelVisual3D>
                 </Viewport3D>
             </Viewbox>
-            <lvc:CartesianChart Grid.Column="1" Name="AccelerationChart" DisableAnimations="True" DataTooltip="{x:Null}" Hoverable="False" Width="200" Height="200">
+            <lvc:CartesianChart Grid.Column="1" Name="AccelerationChart" DisableAnimations="True" DataTooltip="{x:Null}" Hoverable="False" Width="280" Height="200">
                 <lvc:CartesianChart.Series>
                     <lvc:LineSeries Values="{Binding AccelerationValues_X}" Fill="Transparent" LineSmoothness="0.5" PointGeometry="" ScalesYAt="0" Title="X" Stroke="DodgerBlue"/>
                     <lvc:LineSeries Values="{Binding AccelerationValues_Y}" Fill="Transparent" LineSmoothness="0.5" PointGeometry="" ScalesYAt="0" Title="Y" Stroke="OrangeRed"/>
