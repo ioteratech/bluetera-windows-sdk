@@ -20,9 +20,9 @@ namespace Bluetera
     public sealed class BlueteraDevice : IDisposable
     {
         #region Fields
-        private GattDeviceService _service;
-        private GattCharacteristic _txChar;     // TX is Bluetera --> Central (using Notifications)
-        private GattCharacteristic _rxChar;     // RX is Central --> Bluetera     
+        private GattDeviceService _busService;     // Bluetera UART Service - see comment (1) at the end of this file
+        private GattCharacteristic _busTxChar;     // TX is Bluetera --> Central (using Notifications)
+        private GattCharacteristic _busRxChar;     // RX is Central --> Bluetera     
         private List<byte> _rxData = new List<byte>();
         private bool _isDisposed = false;
         #endregion
@@ -68,7 +68,7 @@ namespace Bluetera
 
             if (stream.Position > 0)
             {
-                return await _rxChar.WriteValueAsync(stream.ToArray().AsBuffer());
+                return await _busRxChar.WriteValueAsync(stream.ToArray().AsBuffer());
             }
             else
             {
@@ -78,9 +78,8 @@ namespace Bluetera
 
         public void Disconnect()
         {
-            // Windows does not have a 'Disconnect' method per-se. The way to prevent the device from auto-connecting is to dispose it and any services it holds
+            // Windows does not have a 'Disconnect' method per-se. The way to prevent the device from auto-connecting is to dispose it and any services it holds.
             // See https://social.msdn.microsoft.com/Forums/windowsdesktop/en-US/9eae39ff-f6ca-4aa9-adaf-97450f2b4a6c/disconnect-bluetooth-low-energy?forum=wdk
-
             Dispose();
         }
         #endregion
@@ -92,8 +91,8 @@ namespace Bluetera
             {
                 if (sender.ConnectionStatus == BluetoothConnectionStatus.Connected)
                 {
-                    if (_txChar != null)
-                        await _txChar.WriteClientCharacteristicConfigurationDescriptorAsync(GattClientCharacteristicConfigurationDescriptorValue.Notify);
+                    if (_busTxChar != null)
+                        await _busTxChar.WriteClientCharacteristicConfigurationDescriptorAsync(GattClientCharacteristicConfigurationDescriptorValue.Notify);
                 }
 
                 ConnectionStatusChanged?.Invoke(this, sender.ConnectionStatus);
@@ -132,59 +131,38 @@ namespace Bluetera
         #region Helpers
         private static async Task<GattDeviceService> GetServiceAsync(BluetoothLEDevice device, Guid uuid)
         {
-            try
-            {
-                var result = await device.GetGattServicesForUuidAsync(uuid);
-                return result.Services[0];
-            }
-            catch (Exception ex)
-            {
-                throw new BlueteraException("Operation failed", ex);
-            }
+            var result = await device.GetGattServicesForUuidAsync(uuid);
+            return result.Services[0];
         }
 
         private static async Task<GattCharacteristic> GetCharacteristicAsync(GattDeviceService service, Guid uuid)
         {
-            try
-            {
-                var result = await service.GetCharacteristicsForUuidAsync(uuid);
-                return result.Characteristics[0];
-            }
-            catch (Exception ex)
-            {
-                throw new BlueteraException("Operation failed", ex);
-            }
+            var result = await service.GetCharacteristicsForUuidAsync(uuid);
+            return result.Characteristics[0];
         }
 
         private static async Task<Dictionary<Guid, byte[]>> ReadAllCharacteristicsAsync(BluetoothLEDevice device, Guid serviceUuid)
         {
-            try
+            var result = new Dictionary<Guid, byte[]>();
+            using (var infoService = await GetServiceAsync(device, GattServiceUuids.DeviceInformation))
             {
-                var result = new Dictionary<Guid, byte[]>();
-                using (var infoService = await GetServiceAsync(device, GattServiceUuids.DeviceInformation))
+                // it is valid to await() in foreach() in this case, as we need the results in order
+                var gcResult = await infoService.GetCharacteristicsAsync(BluetoothCacheMode.Uncached);
+                foreach (var c in gcResult.Characteristics)
                 {
-                    // it is valid to await() in foreach() in this case, as we need the results in order
-                    var gcResult = await infoService.GetCharacteristicsAsync(BluetoothCacheMode.Uncached);
-                    foreach (var c in gcResult.Characteristics)
+                    if (c.CharacteristicProperties.HasFlag(GattCharacteristicProperties.Read))
                     {
-                        if (c.CharacteristicProperties.HasFlag(GattCharacteristicProperties.Read))
+                        var grResult = await c.ReadValueAsync(BluetoothCacheMode.Uncached);
+                        using (var reader = DataReader.FromBuffer(grResult.Value))
                         {
-                            var grResult = await c.ReadValueAsync(BluetoothCacheMode.Uncached);
-                            using (var reader = DataReader.FromBuffer(grResult.Value))
-                            {
-                                var value = new byte[reader.UnconsumedBufferLength];
-                                reader.ReadBytes(value);
-                                result.Add(c.Uuid, value);
-                            }
+                            var value = new byte[reader.UnconsumedBufferLength];
+                            reader.ReadBytes(value);
+                            result.Add(c.Uuid, value);
                         }
                     }
-
-                    return result;
                 }
-            }
-            catch(Exception ex)
-            {
-                throw new BlueteraException("Operation failed", ex);
+
+                return result;
             }
         }
         #endregion
@@ -201,18 +179,18 @@ namespace Bluetera
             {
                 // read device information
                 byte[] bytes;
-                var values = await ReadAllCharacteristicsAsync(BaseDevice, GattServiceUuids.DeviceInformation);                
-                if(values.TryGetValue(GattCharacteristicUuids.HardwareRevisionString, out bytes))
+                var values = await ReadAllCharacteristicsAsync(BaseDevice, GattServiceUuids.DeviceInformation);
+                if (values.TryGetValue(GattCharacteristicUuids.HardwareRevisionString, out bytes))
                     HardwareVersion = Encoding.UTF8.GetString(bytes);
                 if (values.TryGetValue(GattCharacteristicUuids.FirmwareRevisionString, out bytes))
                     FirmwareVersion = Encoding.UTF8.GetString(bytes);
 
                 // get service and characteristics. This will also physically connect to the device
-                _service = await GetServiceAsync(BaseDevice, BlueteraConstants.BusServiceUuid);
-                _rxChar = await GetCharacteristicAsync(_service, BlueteraConstants.BusRxCharUuid);
-                _txChar = await GetCharacteristicAsync(_service, BlueteraConstants.BusTxCharUuid);
-                _txChar.ValueChanged += _txChar_ValueChanged;
-                var gattStatus = await _txChar.WriteClientCharacteristicConfigurationDescriptorAsync(GattClientCharacteristicConfigurationDescriptorValue.Notify);
+                _busService = await GetServiceAsync(BaseDevice, BlueteraConstants.BusServiceUuid);
+                _busRxChar = await GetCharacteristicAsync(_busService, BlueteraConstants.BusRxCharUuid);
+                _busTxChar = await GetCharacteristicAsync(_busService, BlueteraConstants.BusTxCharUuid);
+                _busTxChar.ValueChanged += _txChar_ValueChanged;
+                var gattStatus = await _busTxChar.WriteClientCharacteristicConfigurationDescriptorAsync(GattClientCharacteristicConfigurationDescriptorValue.Notify);
 
                 if (gattStatus != GattCommunicationStatus.Success)
                     throw new BlueteraException("Failed to enable notifications");
@@ -220,10 +198,10 @@ namespace Bluetera
                 // start watching for device connection/disconnection
                 BaseDevice.ConnectionStatusChanged += _baseDevice_ConnectionStatusChanged;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 Dispose();
-                throw;
+                throw new BlueteraException("Operation failed", ex);
             }
         }
 
@@ -233,16 +211,23 @@ namespace Bluetera
                 return;
 
             BaseDevice?.Dispose();
-            _service?.Dispose();
+            _busService?.Dispose();
 
-            if (_txChar != null)
-                _txChar.ValueChanged -= _txChar_ValueChanged;
+            if (_busTxChar != null)
+                _busTxChar.ValueChanged -= _txChar_ValueChanged;
 
-            _txChar = null;
-            _rxChar = null;
+            _busTxChar = null;
+            _busRxChar = null;
 
             _isDisposed = true;
         }
         #endregion        
     }
 }
+
+/*
+ * Comments:
+ * 
+ * 1. We don't strictly need to keep a reference to the Bluetera service. We keep it so we can call it's Disponse() when we wish to physically disconnect.
+ *    See BlueteraDevice.Disconnect() and https://social.msdn.microsoft.com/Forums/windowsdesktop/en-US/9eae39ff-f6ca-4aa9-adaf-97450f2b4a6c/disconnect-bluetooth-low-energy?forum=wdk 
+ * */
