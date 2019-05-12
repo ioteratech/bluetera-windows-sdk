@@ -18,10 +18,24 @@
         <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
-            <Viewbox Grid.Column="0" ClipToBounds="True" Width="400" Height="400">
-                <Viewport3D  ClipToBounds="True" Width="300" Height="200">
+            <TextBlock Grid.Column="0" VerticalAlignment="Center" Margin="15,0,0,0"
+                       LineStackingStrategy="BlockLineHeight" LineHeight="20" Foreground="#CF32C6F4">
+                <TextBlock.Text>
+                    <MultiBinding StringFormat="{}Roll: {0:0.0}&#10;Pitch: {1:0.0}&#10;Yaw: {2:0.0}&#10;&#10;X: {3:0.0}&#10;Y: {4:0.0}&#10;Z: {5:0.0}">
+                        <Binding Path="Roll" />
+                        <Binding Path="Pitch" />
+                        <Binding Path="Yaw" />
+                        <Binding Path="AccX" />
+                        <Binding Path="AccY" />
+                        <Binding Path="AccZ" />
+                    </MultiBinding>
+                </TextBlock.Text>
+            </TextBlock>
+            <Viewbox Grid.Column="1" ClipToBounds="True" Width="300" Height="300">
+                <Viewport3D  ClipToBounds="True" Width="300" Height="300">
                     <Viewport3D.Camera>
                         <PerspectiveCamera x:Name="myPerspectiveCamera" FarPlaneDistance="15"  LookDirection="0,0,-1" UpDirection="0,1,0" NearPlaneDistance="1" Position="0,0,3" FieldOfView="50"/>
                     </Viewport3D.Camera>
@@ -76,11 +90,14 @@
                     </ModelVisual3D>
                 </Viewport3D>
             </Viewbox>
-            <lvc:CartesianChart Grid.Column="1" Name="AccelerationChart" DisableAnimations="True" DataTooltip="{x:Null}" Hoverable="False" Width="280" Height="200">
+            <lvc:CartesianChart Grid.Column="2" Name="AccelerationChart" DisableAnimations="True" DataTooltip="{x:Null}" Hoverable="False" Width="280" Height="200" LegendLocation="Bottom">
+                <lvc:CartesianChart.ChartLegend>
+                    <lvc:DefaultLegend BulletSize="20" Foreground="White"/>
+                </lvc:CartesianChart.ChartLegend>
                 <lvc:CartesianChart.Series>
-                    <lvc:LineSeries Values="{Binding AccelerationValues_X}" Fill="Transparent" LineSmoothness="0.5" PointGeometry="" ScalesYAt="0" Title="X" Stroke="DodgerBlue"/>
-                    <lvc:LineSeries Values="{Binding AccelerationValues_Y}" Fill="Transparent" LineSmoothness="0.5" PointGeometry="" ScalesYAt="0" Title="Y" Stroke="OrangeRed"/>
-                    <lvc:LineSeries Values="{Binding AccelerationValues_Z}" Fill="Transparent" LineSmoothness="0.5" PointGeometry="" ScalesYAt="0" Title="Z" Stroke="LawnGreen"/>
+                    <lvc:LineSeries Values="{Binding AccelerationValues_X}" Fill="Transparent" LineSmoothness="0.5" ScalesYAt="0" Title="X" Stroke="DodgerBlue" PointGeometrySize="0" PointGeometry="{x:Static lvc:DefaultGeometries.None}"/>
+                    <lvc:LineSeries Values="{Binding AccelerationValues_Y}" Fill="Transparent" LineSmoothness="0.5" ScalesYAt="0" Title="Y" Stroke="OrangeRed" PointGeometrySize="0" PointGeometry="{x:Static lvc:DefaultGeometries.None}"/>
+                    <lvc:LineSeries Values="{Binding AccelerationValues_Z}" Fill="Transparent" LineSmoothness="0.5" ScalesYAt="0" Title="Z" Stroke="LawnGreen" PointGeometry="{x:Static lvc:DefaultGeometries.None}"/>
                 </lvc:CartesianChart.Series>
                 <lvc:CartesianChart.AxisX>
                     <lvc:Axis MaxValue="100" ShowLabels="False">
@@ -89,6 +106,9 @@
                         </lvc:Axis.Separator>
                     </lvc:Axis>
                 </lvc:CartesianChart.AxisX>
+                <lvc:CartesianChart.AxisY>
+                    <lvc:Axis Title="Acceleration" LabelFormatter="{Binding AccelerationYFormatter}" Foreground="White" />
+                </lvc:CartesianChart.AxisY>
             </lvc:CartesianChart>
         </Grid>
         <Grid>

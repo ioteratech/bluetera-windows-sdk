@@ -84,6 +84,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="BlueteraMessages.cs" />
+    <Compile Include="Extensions.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
@@ -107,7 +108,9 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <None Include="packages.config" />
+    <None Include="packages.config">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -158,6 +161,19 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="iotera.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="..\..\resources\images\ble.png">
+      <Link>images\ble.png</Link>
+    </Resource>
+    <Resource Include="..\..\resources\images\open_hw.jpg">
+      <Link>images\open_hw.jpg</Link>
+    </Resource>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="..\..\resources\images\iotera_logo.png">
+      <Link>images\iotera_logo.png</Link>
+    </Resource>
   </ItemGroup>
   <Import Project="..\BlueteraSdk\BlueteraSdk.projitems" Label="Shared" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

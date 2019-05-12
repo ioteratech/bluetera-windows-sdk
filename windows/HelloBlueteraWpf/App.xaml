@@ -10,13 +10,24 @@
         <Style TargetType="{x:Type Label}">
             <Setter Property="FontFamily" Value="Verdana" />
             <Setter Property="FontWeight" Value="Normal" />
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="Foreground" Value="White" />
+        </Style>
+
+        <Style TargetType="{x:Type TextBlock}">
+            <Setter Property="FontFamily" Value="Verdana" />
+            <Setter Property="FontWeight" Value="Normal" />
+            <Setter Property="Background" Value="Transparent" />
         </Style>
 
         <Style TargetType="{x:Type Button}">
             <Setter Property="FontFamily" Value="Verdana" />
             <Setter Property="FontWeight" Value="Normal" />
+            <Setter Property="Background" Value="#9F32C6F4" />
+            <Setter Property="Foreground" Value="White" />
+            <Setter Property="Opacity" Value="0.6"/>
         </Style>
-
+        
         <!-- 3D Models -->
         <MeshGeometry3D x:Key="CubeSide01"
                         TriangleIndices="0,1,2 3,4,5 "
@@ -59,7 +70,7 @@
         <MaterialGroup x:Key="LeavesMaterial1">
             <DiffuseMaterial>
                 <DiffuseMaterial.Brush>
-                    <ImageBrush Stretch="UniformToFill" ImageSource="images\leaves_closeup.png" TileMode="None" ViewportUnits="Absolute" Viewport="0 0 1 1" AlignmentX="Left" AlignmentY="Top" Opacity="1.000000" />
+                    <ImageBrush Stretch="UniformToFill" ImageSource="images\open_hw.jpg" TileMode="None" ViewportUnits="Absolute" Viewport="0 0 1 1" AlignmentX="Left" AlignmentY="Top" Opacity="1.000000" />
                 </DiffuseMaterial.Brush>
             </DiffuseMaterial>
             <SpecularMaterial SpecularPower="85.3333">
@@ -81,7 +92,7 @@
                 </SpecularMaterial.Brush>
             </SpecularMaterial>
         </MaterialGroup>
-        
+
         <MaterialGroup x:Key="BranchesMaterial">
             <DiffuseMaterial>
                 <DiffuseMaterial.Brush>
@@ -94,11 +105,11 @@
                 </SpecularMaterial.Brush>
             </SpecularMaterial>
         </MaterialGroup>
-        
+
         <MaterialGroup x:Key="BerriesMaterial">
             <DiffuseMaterial>
                 <DiffuseMaterial.Brush>
-                    <ImageBrush Stretch="UniformToFill" ImageSource="images\berries.jpg" TileMode="None" ViewportUnits="Absolute" Viewport="0 0 1 1" AlignmentX="Left" AlignmentY="Top" Opacity="1.000000" />
+                    <ImageBrush Stretch="UniformToFill" ImageSource="images\ble.png" TileMode="None" ViewportUnits="Absolute" Viewport="0 0 1 1" AlignmentX="Left" AlignmentY="Top" Opacity="1.000000" />
                 </DiffuseMaterial.Brush>
             </DiffuseMaterial>
             <SpecularMaterial SpecularPower="85.3333">
@@ -107,11 +118,11 @@
                 </SpecularMaterial.Brush>
             </SpecularMaterial>
         </MaterialGroup>
-        
+
         <MaterialGroup x:Key="FlowersMaterial">
             <DiffuseMaterial>
                 <DiffuseMaterial.Brush>
-                    <ImageBrush Stretch="UniformToFill" ImageSource="images\Waterlilies.png" ViewportUnits="Absolute" Viewport="0 0 1 1" AlignmentX="Left" AlignmentY="Top" Opacity="1.000000" />
+                    <ImageBrush Stretch="UniformToFill" ImageSource="images\iotera_logo.png" ViewportUnits="Absolute" Viewport="0 0 1 1" AlignmentX="Left" AlignmentY="Top" Opacity="1.000000" />
                 </DiffuseMaterial.Brush>
             </DiffuseMaterial>
             <SpecularMaterial SpecularPower="85.3333">
@@ -120,7 +131,7 @@
                 </SpecularMaterial.Brush>
             </SpecularMaterial>
         </MaterialGroup>
-        
+
         <MaterialGroup x:Key="SunsetMaterial">
             <DiffuseMaterial>
                 <DiffuseMaterial.Brush>
