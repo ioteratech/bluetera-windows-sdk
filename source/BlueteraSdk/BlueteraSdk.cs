@@ -66,17 +66,24 @@ namespace Bluetera
 
             // non-UWP applications (console, WPF, etc.) should use the auto-pair with the device, or the pairing result will be 'RequiredHandlerNotRegistered'
             // see e.g. https://stackoverflow.com/questions/45191412/deviceinformation-pairasync-not-working-in-wpf/45196036#45196036
+            DevicePairingResult pairingResult;
             if (autopair)
+            {   // this will auto-pair without any popup
                 bluetera.BaseDevice.DeviceInformation.Pairing.Custom.PairingRequested += (sender, args) => { args.Accept(); };
+                pairingResult = await bluetera.BaseDevice.DeviceInformation.Pairing.Custom.PairAsync(DevicePairingKinds.ConfirmOnly);
+            }
+            else
+            {   // If not already paired, this will invoke a pop-up requesting to pair
+                pairingResult = await bluetera.BaseDevice.DeviceInformation.Pairing.PairAsync();
+            }
 
-            var result = await bluetera.BaseDevice.DeviceInformation.Pairing.Custom.PairAsync(DevicePairingKinds.ConfirmOnly);
-            if ((result.Status == DevicePairingResultStatus.AlreadyPaired) || (result.Status == DevicePairingResultStatus.Paired))
+            if ((pairingResult.Status == DevicePairingResultStatus.AlreadyPaired) || (pairingResult.Status == DevicePairingResultStatus.Paired))
             {
                 await bluetera.Connect();
             }
             else
             {
-                throw new BlueteraException($"Operation failed. Pairing result = {result.Status}");
+                throw new BlueteraException($"Operation failed. Pairing result = {pairingResult.Status}");
             }
 
             return bluetera;
