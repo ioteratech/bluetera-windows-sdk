@@ -39,13 +39,13 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Google.Protobuf, Version=3.7.0.0, Culture=neutral, PublicKeyToken=a7d26565bac4d604, processorArchitecture=MSIL">
-      <HintPath>..\packages\Google.Protobuf.3.7.0\lib\net45\Google.Protobuf.dll</HintPath>
+      <HintPath>..\..\packages\Google.Protobuf.3.7.0\lib\net45\Google.Protobuf.dll</HintPath>
     </Reference>
     <Reference Include="LiveCharts, Version=0.9.7.0, Culture=neutral, PublicKeyToken=0bc1f845d1ebb8df, processorArchitecture=MSIL">
-      <HintPath>..\packages\LiveCharts.0.9.7\lib\net45\LiveCharts.dll</HintPath>
+      <HintPath>..\..\packages\LiveCharts.0.9.7\lib\net45\LiveCharts.dll</HintPath>
     </Reference>
     <Reference Include="LiveCharts.Wpf, Version=0.9.7.0, Culture=neutral, PublicKeyToken=0bc1f845d1ebb8df, processorArchitecture=MSIL">
-      <HintPath>..\packages\LiveCharts.Wpf.0.9.7\lib\net45\LiveCharts.Wpf.dll</HintPath>
+      <HintPath>..\..\packages\LiveCharts.Wpf.0.9.7\lib\net45\LiveCharts.Wpf.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -108,9 +108,7 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <None Include="packages.config">
-      <SubType>Designer</SubType>
-    </None>
+    <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -120,62 +118,56 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="..\..\resources\images\berries.jpg">
-      <Link>images\berries.jpg</Link>
-    </Resource>
-    <Resource Include="..\..\resources\images\branches.png">
-      <Link>images\branches.png</Link>
-    </Resource>
-    <Resource Include="..\..\resources\images\leafpicturecube2r000003.png">
-      <Link>images\leafpicturecube2r000003.png</Link>
-    </Resource>
-    <Resource Include="..\..\resources\images\leafpicturecube2r000005.png">
-      <Link>images\leafpicturecube2r000005.png</Link>
-    </Resource>
-    <Resource Include="..\..\resources\images\leaves_closeup.png">
-      <Link>images\leaves_closeup.png</Link>
-    </Resource>
-    <Resource Include="..\..\resources\images\rippled_metal_smaller.png">
-      <Link>images\rippled_metal_smaller.png</Link>
-    </Resource>
-    <Resource Include="..\..\resources\images\rocks.jpg">
-      <Link>images\rocks.jpg</Link>
-    </Resource>
-    <Resource Include="..\..\resources\images\rocks.png">
-      <Link>images\rocks.png</Link>
-    </Resource>
-    <Resource Include="..\..\resources\images\sunset.jpg">
-      <Link>images\sunset.jpg</Link>
-    </Resource>
-    <Resource Include="..\..\resources\images\waterlilies.jpg">
-      <Link>images\waterlilies.jpg</Link>
-    </Resource>
-    <Resource Include="..\..\resources\images\waterlilies.png">
-      <Link>images\waterlilies.png</Link>
-    </Resource>
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="..\..\resources\images\iotera_full_logo.png">
-      <Link>images\iotera_full_logo.png</Link>
-    </Resource>
-  </ItemGroup>
-  <ItemGroup>
     <Resource Include="iotera.ico" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="..\..\resources\images\ble.png">
+    <Resource Include="..\..\..\resources\images\berries.jpg">
+      <Link>images\berries.jpg</Link>
+    </Resource>
+    <Resource Include="..\..\..\resources\images\ble.png">
       <Link>images\ble.png</Link>
     </Resource>
-    <Resource Include="..\..\resources\images\open_hw.jpg">
-      <Link>images\open_hw.jpg</Link>
+    <Resource Include="..\..\..\resources\images\branches.png">
+      <Link>images\branches.png</Link>
     </Resource>
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="..\..\resources\images\iotera_logo.png">
+    <Resource Include="..\..\..\resources\images\iotera_full_logo.png">
+      <Link>images\iotera_full_logo.png</Link>
+    </Resource>
+    <Resource Include="..\..\..\resources\images\iotera_logo.png">
       <Link>images\iotera_logo.png</Link>
     </Resource>
+    <Resource Include="..\..\..\resources\images\leafpicturecube2r000003.png">
+      <Link>images\leafpicturecube2r000003.png</Link>
+    </Resource>
+    <Resource Include="..\..\..\resources\images\leafpicturecube2r000005.png">
+      <Link>images\leafpicturecube2r000005.png</Link>
+    </Resource>
+    <Resource Include="..\..\..\resources\images\leaves_closeup.png">
+      <Link>images\leaves_closeup.png</Link>
+    </Resource>
+    <Resource Include="..\..\..\resources\images\open_hw.jpg">
+      <Link>images\open_hw.jpg</Link>
+    </Resource>
+    <Resource Include="..\..\..\resources\images\rippled_metal_smaller.png">
+      <Link>images\rippled_metal_smaller.png</Link>
+    </Resource>
+    <Resource Include="..\..\..\resources\images\rocks.jpg">
+      <Link>images\rocks.jpg</Link>
+    </Resource>
+    <Resource Include="..\..\..\resources\images\rocks.png">
+      <Link>images\rocks.png</Link>
+    </Resource>
+    <Resource Include="..\..\..\resources\images\sunset.jpg">
+      <Link>images\sunset.jpg</Link>
+    </Resource>
+    <Resource Include="..\..\..\resources\images\waterlilies.jpg">
+      <Link>images\waterlilies.jpg</Link>
+    </Resource>
+    <Resource Include="..\..\..\resources\images\waterlilies.png">
+      <Link>images\waterlilies.png</Link>
+    </Resource>
   </ItemGroup>
-  <Import Project="..\BlueteraSdk\BlueteraSdk.projitems" Label="Shared" />
+  <Import Project="..\..\sdk\BlueteraSdk.projitems" Label="Shared" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PreBuildEvent>

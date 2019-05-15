@@ -67,7 +67,7 @@
     <None Include="App.config" />
     <None Include="packages.config" />
   </ItemGroup>
-  <Import Project="..\BlueteraSdk\BlueteraSdk.projitems" Label="Shared" />
+  <Import Project="..\..\sdk\BlueteraSdk.projitems" Label="Shared" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PreBuildEvent>
