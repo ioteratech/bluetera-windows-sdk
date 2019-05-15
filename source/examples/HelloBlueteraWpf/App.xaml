@@ -23,9 +23,9 @@
         <Style TargetType="{x:Type Button}">
             <Setter Property="FontFamily" Value="Verdana" />
             <Setter Property="FontWeight" Value="Normal" />
-            <Setter Property="Background" Value="#9F32C6F4" />
+            <Setter Property="Background" Value="#CF32C6F4" />
             <Setter Property="Foreground" Value="White" />
-            <Setter Property="Opacity" Value="0.6"/>
+            <Setter Property="Opacity" Value="0.9"/>
         </Style>
         
         <!-- 3D Models -->
