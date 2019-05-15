@@ -121,49 +121,49 @@
     <Resource Include="iotera.ico" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="..\..\..\resources\images\berries.jpg">
+    <Resource Include="..\resources\images\berries.jpg">
       <Link>images\berries.jpg</Link>
     </Resource>
-    <Resource Include="..\..\..\resources\images\ble.png">
+    <Resource Include="..\resources\images\ble.png">
       <Link>images\ble.png</Link>
     </Resource>
-    <Resource Include="..\..\..\resources\images\branches.png">
+    <Resource Include="..\resources\images\branches.png">
       <Link>images\branches.png</Link>
     </Resource>
-    <Resource Include="..\..\..\resources\images\iotera_full_logo.png">
+    <Resource Include="..\resources\images\iotera_full_logo.png">
       <Link>images\iotera_full_logo.png</Link>
     </Resource>
-    <Resource Include="..\..\..\resources\images\iotera_logo.png">
+    <Resource Include="..\resources\images\iotera_logo.png">
       <Link>images\iotera_logo.png</Link>
     </Resource>
-    <Resource Include="..\..\..\resources\images\leafpicturecube2r000003.png">
+    <Resource Include="..\resources\images\leafpicturecube2r000003.png">
       <Link>images\leafpicturecube2r000003.png</Link>
     </Resource>
-    <Resource Include="..\..\..\resources\images\leafpicturecube2r000005.png">
+    <Resource Include="..\resources\images\leafpicturecube2r000005.png">
       <Link>images\leafpicturecube2r000005.png</Link>
     </Resource>
-    <Resource Include="..\..\..\resources\images\leaves_closeup.png">
+    <Resource Include="..\resources\images\leaves_closeup.png">
       <Link>images\leaves_closeup.png</Link>
     </Resource>
-    <Resource Include="..\..\..\resources\images\open_hw.jpg">
+    <Resource Include="..\resources\images\open_hw.jpg">
       <Link>images\open_hw.jpg</Link>
     </Resource>
-    <Resource Include="..\..\..\resources\images\rippled_metal_smaller.png">
+    <Resource Include="..\resources\images\rippled_metal_smaller.png">
       <Link>images\rippled_metal_smaller.png</Link>
     </Resource>
-    <Resource Include="..\..\..\resources\images\rocks.jpg">
+    <Resource Include="..\resources\images\rocks.jpg">
       <Link>images\rocks.jpg</Link>
     </Resource>
-    <Resource Include="..\..\..\resources\images\rocks.png">
+    <Resource Include="..\resources\images\rocks.png">
       <Link>images\rocks.png</Link>
     </Resource>
-    <Resource Include="..\..\..\resources\images\sunset.jpg">
+    <Resource Include="..\resources\images\sunset.jpg">
       <Link>images\sunset.jpg</Link>
     </Resource>
-    <Resource Include="..\..\..\resources\images\waterlilies.jpg">
+    <Resource Include="..\resources\images\waterlilies.jpg">
       <Link>images\waterlilies.jpg</Link>
     </Resource>
-    <Resource Include="..\..\..\resources\images\waterlilies.png">
+    <Resource Include="..\resources\images\waterlilies.png">
       <Link>images\waterlilies.png</Link>
     </Resource>
   </ItemGroup>
