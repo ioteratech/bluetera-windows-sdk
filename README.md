@@ -5,15 +5,16 @@ Visit our website: https://ioteratech.com
 
 ## Getting Started
 Bluetera is an open source IoT platform for the development of smart and connected products. Communication is built around Protocol Buffers, which makes it super easy to add functionality and modify the API. The platform includes:
-* Bluetera Hardware module - repository [here]()
+* Bluetera Hardware module - repository (coming soon)
 * Bluetera Firmware - repository [here](https://github.com/ioteratech/bluetera-firmware)
 * Blutera SDK(s) - this repository is the Windows SDK
  
 
 ### Prerequisites
 - Windows 10 build 1803 or later, with a Bluetooth 4+ adapter
-- A Bluetera module - buy one [here](https://ioteratech.com), or use the Bluetera Emulator (coming soon)
 - Visual Studio 2017 or later
+- Windows 10 SDK version 10.0.17763.0 or higher
+- A Bluetera module - buy one [here](https://ioteratech.com), or use the Bluetera Emulator (coming soon)
 - (optional) Protocol buffers compiler v3+ (available [here](https://developers.google.com/protocol-buffers/docs/downloads))
  
 ### Building
@@ -60,7 +61,7 @@ This is described in detail [here](https://blogs.windows.com/buildingapps/2017/0
 but ultimately boils down to adding references to:
 
 - C:\Program Files (x86)\Windows Kits\10\UnionMetadata\10.0.17763.0\Windows.winmd
-- C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETCore\v4.5\System.Runtime.WindowsRuntime.dll
+- C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\\.NETCore\v4.5\System.Runtime.WindowsRuntime.dll
 
 If you are missing the specific Windows Kit, you can use other compatible versions.
 
