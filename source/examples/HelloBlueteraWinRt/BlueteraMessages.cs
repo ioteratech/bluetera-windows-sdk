@@ -25,7 +25,7 @@ namespace Bluetera {
       byte[] descriptorData = global::System.Convert.FromBase64String(
           string.Concat(
             "ChdibHVldGVyYV9tZXNzYWdlcy5wcm90bxIIYmx1ZXRlcmEiHAoLRWNob1Bh",
-            "eWxvYWQSDQoFdmFsdWUYASABKAkiRAoFRXJyb3ISLQoGbW9kdWxlGAEgASgO",
+            "eWxvYWQSDQoFdmFsdWUYASABKA0iRAoFRXJyb3ISLQoGbW9kdWxlGAEgASgO",
             "Mh0uYmx1ZXRlcmEuQmx1ZXRlcmFNb2R1bGVzVHlwZRIMCgRjb2RlGAIgASgN",
             "IkwKFkltdUFjY2VsZXJhdGlvblBheWxvYWQSEQoJdGltZXN0YW1wGAEgASgN",
             "EgkKAXgYAiABKAISCQoBeRgDIAEoAhIJCgF6GAQgASgCIlUKFEltdVF1YXRl",
@@ -35,25 +35,27 @@ namespace Bluetera {
             "ZWxlcmF0aW9uUGF5bG9hZEgAEjQKCnF1YXRlcm5pb24YAiABKAsyHi5ibHVl",
             "dGVyYS5JbXVRdWF0ZXJuaW9uUGF5bG9hZEgAEiAKBWVycm9yGBAgASgLMg8u",
             "Ymx1ZXRlcmEuRXJyb3JIABIlCgRlY2hvGBEgASgLMhUuYmx1ZXRlcmEuRWNo",
-            "b1BheWxvYWRIAEIJCgdwYXlsb2FkIk4KCEltdVN0YXJ0EhIKCmRhdGFfdHlw",
+            "b1BheWxvYWRIAEIJCgdwYXlsb2FkInkKCEltdVN0YXJ0EhIKCmRhdGFfdHlw",
             "ZXMYASABKAcSCwoDb2RyGAIgASgNEg8KB2FjY19mc3IYAyABKA0SEAoIZ3ly",
-            "b19mc3IYBCABKA0iTAoKSW11Q29tbWFuZBIjCgVzdGFydBgBIAEoCzISLmJs",
-            "dWV0ZXJhLkltdVN0YXJ0SAASDgoEc3RvcBgCIAEoCEgAQgkKB3BheWxvYWQi",
-            "ZgoNVXBsaW5rTWVzc2FnZRIjCgNpbXUYASABKAsyFC5ibHVldGVyYS5JbXVD",
-            "b21tYW5kSAASJQoEZWNobxgRIAEoCzIVLmJsdWV0ZXJhLkVjaG9QYXlsb2Fk",
-            "SABCCQoHcGF5bG9hZCo2ChNCbHVldGVyYU1vZHVsZXNUeXBlEgoKBlNZU1RF",
-            "TRAAEgcKA0lNVRABEgoKBlNEQ0FSRBACKkYKC0ltdURhdGFUeXBlEgsKB1VO",
-            "S05PV04QABIOCgpRVUFURVJOSU9OEAESEQoNQUNDRUxFUk9NRVRFUhACEgcK",
-            "A1JBVxAEYgZwcm90bzM="));
+            "b19mc3IYBCABKA0SKQoJZGF0YV9zaW5rGAUgASgOMhYuYmx1ZXRlcmEuRGF0",
+            "YVNpbmtUeXBlIkwKCkltdUNvbW1hbmQSIwoFc3RhcnQYASABKAsyEi5ibHVl",
+            "dGVyYS5JbXVTdGFydEgAEg4KBHN0b3AYAiABKAhIAEIJCgdwYXlsb2FkImYK",
+            "DVVwbGlua01lc3NhZ2USIwoDaW11GAEgASgLMhQuYmx1ZXRlcmEuSW11Q29t",
+            "bWFuZEgAEiUKBGVjaG8YESABKAsyFS5ibHVldGVyYS5FY2hvUGF5bG9hZEgA",
+            "QgkKB3BheWxvYWQqNgoTQmx1ZXRlcmFNb2R1bGVzVHlwZRIKCgZTWVNURU0Q",
+            "ABIHCgNJTVUQARIKCgZTRENBUkQQAipBCgxEYXRhU2lua1R5cGUSFgoSREFU",
+            "QV9TSU5LX1RZUEVfQkxFEAASGQoVREFUQV9TSU5LX1RZUEVfU0RDQVJEEAEq",
+            "RgoLSW11RGF0YVR5cGUSCwoHVU5LTk9XThAAEg4KClFVQVRFUk5JT04QARIR",
+            "Cg1BQ0NFTEVST01FVEVSEAISBwoDUkFXEARiBnByb3RvMw=="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { },
-          new pbr::GeneratedClrTypeInfo(new[] {typeof(global::Bluetera.BlueteraModulesType), typeof(global::Bluetera.ImuDataType), }, new pbr::GeneratedClrTypeInfo[] {
+          new pbr::GeneratedClrTypeInfo(new[] {typeof(global::Bluetera.BlueteraModulesType), typeof(global::Bluetera.DataSinkType), typeof(global::Bluetera.ImuDataType), }, new pbr::GeneratedClrTypeInfo[] {
             new pbr::GeneratedClrTypeInfo(typeof(global::Bluetera.EchoPayload), global::Bluetera.EchoPayload.Parser, new[]{ "Value" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Bluetera.Error), global::Bluetera.Error.Parser, new[]{ "Module", "Code" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Bluetera.ImuAccelerationPayload), global::Bluetera.ImuAccelerationPayload.Parser, new[]{ "Timestamp", "X", "Y", "Z" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Bluetera.ImuQuaternionPayload), global::Bluetera.ImuQuaternionPayload.Parser, new[]{ "Timestamp", "W", "X", "Y", "Z" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Bluetera.DownlinkMessage), global::Bluetera.DownlinkMessage.Parser, new[]{ "Acceleration", "Quaternion", "Error", "Echo" }, new[]{ "Payload" }, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Bluetera.ImuStart), global::Bluetera.ImuStart.Parser, new[]{ "DataTypes", "Odr", "AccFsr", "GyroFsr" }, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Bluetera.ImuStart), global::Bluetera.ImuStart.Parser, new[]{ "DataTypes", "Odr", "AccFsr", "GyroFsr", "DataSink" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Bluetera.ImuCommand), global::Bluetera.ImuCommand.Parser, new[]{ "Start", "Stop" }, new[]{ "Payload" }, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Bluetera.UplinkMessage), global::Bluetera.UplinkMessage.Parser, new[]{ "Imu", "Echo" }, new[]{ "Payload" }, null, null)
           }));
@@ -74,6 +76,11 @@ namespace Bluetera {
   /// <summary>
   /// Control messsages - from host to Bluetera
   /// </summary>
+  public enum DataSinkType {
+    [pbr::OriginalName("DATA_SINK_TYPE_BLE")] Ble = 0,
+    [pbr::OriginalName("DATA_SINK_TYPE_SDCARD")] Sdcard = 1,
+  }
+
   public enum ImuDataType {
     [pbr::OriginalName("UNKNOWN")] Unknown = 0,
     [pbr::OriginalName("QUATERNION")] Quaternion = 1,
@@ -120,12 +127,12 @@ namespace Bluetera {
 
     /// <summary>Field number for the "value" field.</summary>
     public const int ValueFieldNumber = 1;
-    private string value_ = "";
+    private uint value_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public string Value {
+    public uint Value {
       get { return value_; }
       set {
-        value_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+        value_ = value;
       }
     }
 
@@ -149,7 +156,7 @@ namespace Bluetera {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override int GetHashCode() {
       int hash = 1;
-      if (Value.Length != 0) hash ^= Value.GetHashCode();
+      if (Value != 0) hash ^= Value.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
       }
@@ -163,9 +170,9 @@ namespace Bluetera {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public void WriteTo(pb::CodedOutputStream output) {
-      if (Value.Length != 0) {
-        output.WriteRawTag(10);
-        output.WriteString(Value);
+      if (Value != 0) {
+        output.WriteRawTag(8);
+        output.WriteUInt32(Value);
       }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
@@ -175,8 +182,8 @@ namespace Bluetera {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public int CalculateSize() {
       int size = 0;
-      if (Value.Length != 0) {
-        size += 1 + pb::CodedOutputStream.ComputeStringSize(Value);
+      if (Value != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeUInt32Size(Value);
       }
       if (_unknownFields != null) {
         size += _unknownFields.CalculateSize();
@@ -189,7 +196,7 @@ namespace Bluetera {
       if (other == null) {
         return;
       }
-      if (other.Value.Length != 0) {
+      if (other.Value != 0) {
         Value = other.Value;
       }
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
@@ -203,8 +210,8 @@ namespace Bluetera {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
             break;
-          case 10: {
-            Value = input.ReadString();
+          case 8: {
+            Value = input.ReadUInt32();
             break;
           }
         }
@@ -1141,6 +1148,7 @@ namespace Bluetera {
       odr_ = other.odr_;
       accFsr_ = other.accFsr_;
       gyroFsr_ = other.gyroFsr_;
+      dataSink_ = other.dataSink_;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
@@ -1193,6 +1201,17 @@ namespace Bluetera {
       }
     }
 
+    /// <summary>Field number for the "data_sink" field.</summary>
+    public const int DataSinkFieldNumber = 5;
+    private global::Bluetera.DataSinkType dataSink_ = 0;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public global::Bluetera.DataSinkType DataSink {
+      get { return dataSink_; }
+      set {
+        dataSink_ = value;
+      }
+    }
+
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override bool Equals(object other) {
       return Equals(other as ImuStart);
@@ -1210,6 +1229,7 @@ namespace Bluetera {
       if (Odr != other.Odr) return false;
       if (AccFsr != other.AccFsr) return false;
       if (GyroFsr != other.GyroFsr) return false;
+      if (DataSink != other.DataSink) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
 
@@ -1220,6 +1240,7 @@ namespace Bluetera {
       if (Odr != 0) hash ^= Odr.GetHashCode();
       if (AccFsr != 0) hash ^= AccFsr.GetHashCode();
       if (GyroFsr != 0) hash ^= GyroFsr.GetHashCode();
+      if (DataSink != 0) hash ^= DataSink.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
       }
@@ -1249,6 +1270,10 @@ namespace Bluetera {
         output.WriteRawTag(32);
         output.WriteUInt32(GyroFsr);
       }
+      if (DataSink != 0) {
+        output.WriteRawTag(40);
+        output.WriteEnum((int) DataSink);
+      }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
       }
@@ -1268,6 +1293,9 @@ namespace Bluetera {
       }
       if (GyroFsr != 0) {
         size += 1 + pb::CodedOutputStream.ComputeUInt32Size(GyroFsr);
+      }
+      if (DataSink != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeEnumSize((int) DataSink);
       }
       if (_unknownFields != null) {
         size += _unknownFields.CalculateSize();
@@ -1291,6 +1319,9 @@ namespace Bluetera {
       }
       if (other.GyroFsr != 0) {
         GyroFsr = other.GyroFsr;
+      }
+      if (other.DataSink != 0) {
+        DataSink = other.DataSink;
       }
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
     }
@@ -1317,6 +1348,10 @@ namespace Bluetera {
           }
           case 32: {
             GyroFsr = input.ReadUInt32();
+            break;
+          }
+          case 40: {
+            dataSink_ = (global::Bluetera.DataSinkType) input.ReadEnum();
             break;
           }
         }

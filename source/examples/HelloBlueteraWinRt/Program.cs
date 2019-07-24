@@ -28,7 +28,7 @@ namespace HelloBlueteraWinRt
             sdk.AdvertismentReceived += BlueteraDevice_AdvertismentReceived;
 
             bool running = true;
-            Console.WriteLine("\n\n'q' - quit\n's' - start scan\n't' - stop scan\n'c' - connect\n'd' - disconnect\n'e' - send Echo\n'i' - configure and start IMU\n'j' - stop IMU\n\n");
+            Console.WriteLine("\n\n'q' - quit\n's' - start scan\n't' - stop scan\n'c' - connect\n'd' - disconnect\n'e' - send Echo\n'i' - configure and start IMU\n'j' - stop IMU\n'l' - start IMU and logging\n\n");
             while (running)
             {
                 var key = Console.ReadKey(true);
@@ -91,6 +91,14 @@ namespace HelloBlueteraWinRt
                         }
                         break;
 
+                    case 'l':
+                        {
+                            Console.WriteLine("Configuring and starting IMU with logging to SD card");
+                            var result = StartLogging().Result;
+                            Console.WriteLine($"GattCommunicationStatus: {result}");
+                        }
+                        break;
+
                     default:
                         Console.WriteLine("Invalid command");
                         break;
@@ -132,7 +140,7 @@ namespace HelloBlueteraWinRt
             {
                 Echo = new EchoPayload()
                 {
-                    Value = "Hello"
+                    Value = 9
                 }
             };
 
@@ -147,7 +155,7 @@ namespace HelloBlueteraWinRt
                 {
                     Start = new ImuStart()
                     {
-                        DataTypes = (uint)ImuDataType.Quaternion,    // ImuDataType are enum flags - logically 'OR' to combine several types
+                        DataTypes = (uint)ImuDataType.Quaternion,       // ImuDataType are enum flags - logically 'OR' to combine several types
                         Odr = 50,                                       // Output Data Rate [Hz]
                         AccFsr = 4,                                     // Acceleromenter Full Scale Range [g]
                         GyroFsr = 500                                   // Gyroscope Full Scale Range [deg/sec]
@@ -157,6 +165,27 @@ namespace HelloBlueteraWinRt
             
             return await device.SendMessage(msg);
         }
+
+        private static async Task<GattCommunicationStatus> StartLogging()
+        {
+            UplinkMessage msg = new UplinkMessage()
+            {
+                Imu = new ImuCommand
+                {
+                    Start = new ImuStart()
+                    {
+                        DataTypes = (uint)ImuDataType.Quaternion,   // ImuDataType are enum flags - logically 'OR' to combine several types
+                        Odr = 50,                                   // Output Data Rate [Hz]
+                        AccFsr = 4,                                 // Acceleromenter Full Scale Range [g]
+                        GyroFsr = 500,                              // Gyroscope Full Scale Range [deg/sec]
+                        DataSink = DataSinkType.Sdcard              // Sink for IMU data. Defualt is Bluetooth    
+                    }
+                }
+            };
+
+            return await device.SendMessage(msg);
+        }
+
 
         private static async Task<GattCommunicationStatus> StopImu()
         {
