@@ -8,18 +8,17 @@ Bluetera is an open source IoT platform for the development of smart and connect
 * Bluetera Hardware module - repository (coming soon)
 * Bluetera Firmware - repository [here](https://github.com/ioteratech/bluetera-firmware)
 * Blutera SDK(s) - this repository is the Windows SDK
- 
 
 ### Prerequisites
 - Windows 10 build 1803 or later, with a Bluetooth 4+ adapter
-- Visual Studio 2017 or later
+- Visual Studio 2017 or later (It is recomanded to update to the latest versions)
 - Windows 10 SDK version 10.0.17763.0 or higher
 - A Bluetera module - buy one [here](https://ioteratech.com), or use the Bluetera Emulator (coming soon)
 - (optional) Protocol buffers compiler v3+ (available [here](https://developers.google.com/protocol-buffers/docs/downloads))
  
 ### Building
-- Open the solution file *source\examples\HelloBluetera.sln* in VS2017
-- Build the desired project/configuration. The projects require some NuGet packages - make sure they correctly install
+- Open the solution file *source\HelloBluetera.sln* in VS2017
+- Build the desired project/configuration. The projects require some NuGet packages - make sure they are correctly installed
 - When Building the non-UWP projects (*HelloBlueteraWinRt* and *HelloBlueteraWpf* ), you may need to [manually update the paths of some Windows 10 API references](#winmd).
 
 ### Running
