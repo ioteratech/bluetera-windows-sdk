@@ -29,6 +29,10 @@ namespace HelloBlueteraWpf
         public enum ApplicationStateType { Idle, Scanning, Connecting, Connected, Disconnecting, Error }
         #endregion
 
+        #region Fields
+        private DataRateMeter _dataRateMeter = new DataRateMeter();
+        #endregion
+
         #region Lifecycle
         public MainWindow()
         {
@@ -126,6 +130,14 @@ namespace HelloBlueteraWpf
             get { return _yaw; }
             set { _yaw = value; NotifyPropertyChanged(); }
         }
+
+        private double _dataRate = 0.0;
+        public double DataRate
+        {
+            get { return _dataRate; }
+            set { _dataRate = value; NotifyPropertyChanged(); }
+        }
+        
         #endregion
 
         #region Event handlers
@@ -197,8 +209,13 @@ namespace HelloBlueteraWpf
             {
                 try
                 {
+                    // avoid race 
+                    if (ApplicationState != ApplicationStateType.Scanning)
+                        return;
+
                     _sdk.StopScan();
 
+                    _dataRateMeter.Reset();
                     ApplicationState = ApplicationStateType.Connecting;
                     UpdateControls();
 
@@ -260,10 +277,16 @@ namespace HelloBlueteraWpf
         {
             Dispatcher.Invoke(() =>
             {
+                // update data rate UI
+                //DataRate = _dataRateMeter.DataRate;
                 switch (args.PayloadCase)
                 {
                     case DownlinkMessage.PayloadOneofCase.Quaternion:
                         {
+                            // update rate meter
+                            _dataRateMeter.Update(args.Quaternion.Timestamp);
+                            DataRate = _dataRateMeter.DataRate;
+
                             // raw Bluetera quaternion
                             var qb = new Quaternion(args.Quaternion.X, args.Quaternion.Y, args.Quaternion.Z, args.Quaternion.W);
 
@@ -281,6 +304,7 @@ namespace HelloBlueteraWpf
                         break;
 
                     case DownlinkMessage.PayloadOneofCase.Acceleration:
+                        // Update chart
                         AccX = args.Acceleration.X;
                         AccelerationValues_X.Add(AccX);
                         if (AccelerationValues_X.Count > 100) AccelerationValues_X.RemoveAt(0);

@@ -25,13 +25,14 @@
             <TextBlock Grid.Column="0" VerticalAlignment="Center" Margin="15,0,0,0"
                        LineStackingStrategy="BlockLineHeight" LineHeight="20" Foreground="#CF32C6F4">
                 <TextBlock.Text>
-                    <MultiBinding StringFormat="{}Roll: {0:0.0}&#10;Pitch: {1:0.0}&#10;Yaw: {2:0.0}&#10;&#10;X: {3:0.0}&#10;Y: {4:0.0}&#10;Z: {5:0.0}">
+                    <MultiBinding StringFormat="{}Roll: {0:0.0}&#176;&#10;Pitch: {1:0.0}&#176;&#10;Yaw: {2:0.0}&#176;&#10;&#10;X: {3:0.0} g&#10;Y: {4:0.0} g&#10;Z: {5:0.0} g&#10;&#10;Rate: {6:0} Hz">
                         <Binding Path="Roll" />
                         <Binding Path="Pitch" />
                         <Binding Path="Yaw" />
                         <Binding Path="AccX" />
                         <Binding Path="AccY" />
                         <Binding Path="AccZ" />
+                        <Binding Path="DataRate" />
                     </MultiBinding>
                 </TextBlock.Text>
             </TextBlock>
@@ -70,7 +71,7 @@
                 <ColumnDefinition />
             </Grid.ColumnDefinitions>
             <Button x:Name="StartStopButton" Content="Start" Width="100" Height="30" Grid.Column="0" Margin="5,5,10,5" HorizontalAlignment="Right" Click="StartStopButton_Click"/>
-            <Button x:Name="ResetCubeButton" Content="Reset Cube" Width="100" Height="30" Grid.Column="1" Margin="10,5,5,5" HorizontalAlignment="Left" Click="ResetCubeButton_Click"/>
+            <Button x:Name="ResetCubeButton" Content="Reset Model" Width="100" Height="30" Grid.Column="1" Margin="10,5,5,5" HorizontalAlignment="Left" Click="ResetCubeButton_Click"/>
         </Grid>
         <Grid x:Name="StatusBar">
             <Grid.ColumnDefinitions>
