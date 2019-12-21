@@ -40,8 +40,8 @@ namespace HelloBlueteraWpf
 
             // Model
             ObjReader CurrentHelixObjReader = new ObjReader();
-            //model.Content = CurrentHelixObjReader.Read(@"D:\Users\Boaz\Desktop\temp\Airplane_v2_L2.123c9fd3dbfa-7118-4fde-af56-f04ef61f45dd\11804_Airplane_v2_l2.obj");
-            model.Content = CurrentHelixObjReader.Read(@"D:\Users\Boaz\Desktop\temp\Brown_Betty_Teapot_v1_L1.123c0890bb91-c798-45a4-8c00-bdb74366c50e\20900_Brown_Betty_Teapot_v1.obj");
+            model.Content = CurrentHelixObjReader.Read(@"D:\Users\Boaz\Desktop\temp\Airplane_v2_L2.123c9fd3dbfa-7118-4fde-af56-f04ef61f45dd\11804_Airplane_v2_l2.obj");
+            //model.Content = CurrentHelixObjReader.Read(@"D:\Users\Boaz\Desktop\temp\Brown_Betty_Teapot_v1_L1.123c0890bb91-c798-45a4-8c00-bdb74366c50e\20900_Brown_Betty_Teapot_v1.obj");
 
 
             // Graph
@@ -137,7 +137,7 @@ namespace HelloBlueteraWpf
             get { return _dataRate; }
             set { _dataRate = value; NotifyPropertyChanged(); }
         }
-        
+
         #endregion
 
         #region Event handlers
@@ -158,12 +158,11 @@ namespace HelloBlueteraWpf
             }
         }
 
-        private void ResetCubeButton_Click(object sender, RoutedEventArgs e)
+        private void SetHeadingButton_Click(object sender, RoutedEventArgs e)
         {
             // Capture last reeived Quaternion as initial rotation
-            _q0 = _qt;
-            _q0.Normalize();
-            _q0.Invert();
+            _qbm = QuaternionExtensions.CalcBodyToImuRotationFromPitch(_q0.Inverse(), _qt);
+            _q0 = (_q0.Inverse() * _qbm).Inverse();
         }
 
         #region Helpers
@@ -196,6 +195,7 @@ namespace HelloBlueteraWpf
 
         #region Bluetera
         #region Fields
+        private Quaternion _qbm = Quaternion.Identity;
         private Quaternion _q0 = Quaternion.Identity;
         private Quaternion _qt = Quaternion.Identity;
         private BlueteraSdk _sdk;
@@ -291,9 +291,12 @@ namespace HelloBlueteraWpf
                             var qb = new Quaternion(args.Quaternion.X, args.Quaternion.Y, args.Quaternion.Z, args.Quaternion.W);
 
                             // change coordinates and apply rotation - see note (2) at the end of this file                            
-                            _qt = new Quaternion(qb.Y, qb.Z, qb.X, qb.W);
-                            //CubeModel.Transform = new RotateTransform3D(new QuaternionRotation3D(_q0 * _qt));   // we multiple by q0 to apply 'reset cube' operation
-                            model.Transform = new RotateTransform3D(new QuaternionRotation3D(_q0 * _qt));   // we multiple by q0 to apply 'reset cube' operation
+                            _qt = new Quaternion(qb.X, qb.Y, qb.Z, qb.W);
+
+                            if (_q0.IsIdentity)
+                                _q0 = _qt.Inverse();
+
+                            model.Transform = new RotateTransform3D(new QuaternionRotation3D(_q0 * _qt * _qbm));   // we multiple by q0 to apply 'reset cube' operation
 
                             // update Euler angles
                             var angles = qb.GetEuelerAngles();

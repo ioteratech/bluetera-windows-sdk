@@ -71,7 +71,7 @@
                 <ColumnDefinition />
             </Grid.ColumnDefinitions>
             <Button x:Name="StartStopButton" Content="Start" Width="100" Height="30" Grid.Column="0" Margin="5,5,10,5" HorizontalAlignment="Right" Click="StartStopButton_Click"/>
-            <Button x:Name="ResetCubeButton" Content="Reset Model" Width="100" Height="30" Grid.Column="1" Margin="10,5,5,5" HorizontalAlignment="Left" Click="ResetCubeButton_Click"/>
+            <Button x:Name="SetHeadingButton" Content="Set Heading" Width="100" Height="30" Grid.Column="1" Margin="10,5,5,5" HorizontalAlignment="Left" Click="SetHeadingButton_Click"/>
         </Grid>
         <Grid x:Name="StatusBar">
             <Grid.ColumnDefinitions>
