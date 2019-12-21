@@ -6,6 +6,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:HelloBlueteraWpf"
         xmlns:lvc="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
+        xmlns:ht="http://helix-toolkit.org/wpf"
         mc:Ignorable="d"
         Title="Hello Bluetera - WPF"
         Width="740"
@@ -35,60 +36,12 @@
                 </TextBlock.Text>
             </TextBlock>
             <Viewbox Grid.Column="1" ClipToBounds="True" Width="300" Height="300">
-                <Viewport3D  ClipToBounds="True" Width="300" Height="300">
-                    <Viewport3D.Camera>
-                        <PerspectiveCamera x:Name="myPerspectiveCamera" FarPlaneDistance="15"  LookDirection="0,0,-1" UpDirection="0,1,0" NearPlaneDistance="1" Position="0,0,3" FieldOfView="50"/>
-                    </Viewport3D.Camera>
-                    <ModelVisual3D x:Name="CubeModel">
-                        <ModelVisual3D.Children>
-                            <ModelVisual3D>
-                                <ModelVisual3D.Content>
-                                    <AmbientLight Color="#333333" />
-                                </ModelVisual3D.Content>
-                            </ModelVisual3D>
-                            <ModelVisual3D>
-                                <ModelVisual3D.Content>
-                                    <DirectionalLight Color="#FFFFFF" Direction="-0.612372,-0.5,-0.612372" />
-                                </ModelVisual3D.Content>
-                            </ModelVisual3D>
-                            <ModelVisual3D>
-                                <ModelVisual3D.Content>
-                                    <DirectionalLight Color="#FFFFFF" Direction="0.612372,-0.5,-0.612372" />
-                                </ModelVisual3D.Content>
-                            </ModelVisual3D>
-                            <ModelVisual3D>
-                                <ModelVisual3D.Content>
-                                    <GeometryModel3D Geometry="{StaticResource CubeSide01}" Material="{StaticResource BranchesMaterial}"/>
-                                </ModelVisual3D.Content>
-                            </ModelVisual3D>
-                            <ModelVisual3D>
-                                <ModelVisual3D.Content>
-                                    <GeometryModel3D Geometry="{StaticResource CubeSide02}" Material="{StaticResource FlowersMaterial}"/>
-                                </ModelVisual3D.Content>
-                            </ModelVisual3D>
-                            <ModelVisual3D>
-                                <ModelVisual3D.Content>
-                                    <GeometryModel3D Geometry="{StaticResource CubeSide03}" Material="{StaticResource BerriesMaterial}"/>
-                                </ModelVisual3D.Content>
-                            </ModelVisual3D>
-                            <ModelVisual3D>
-                                <ModelVisual3D.Content>
-                                    <GeometryModel3D Geometry="{StaticResource CubeSide04}" Material="{StaticResource LeavesMaterial1}"/>
-                                </ModelVisual3D.Content>
-                            </ModelVisual3D>
-                            <ModelVisual3D>
-                                <ModelVisual3D.Content>
-                                    <GeometryModel3D Geometry="{StaticResource CubeSide05}" Material="{StaticResource RocksMaterial}"/>
-                                </ModelVisual3D.Content>
-                            </ModelVisual3D>
-                            <ModelVisual3D>
-                                <ModelVisual3D.Content>
-                                    <GeometryModel3D Geometry="{StaticResource CubeSide06}" Material="{StaticResource SunsetMaterial}"/>
-                                </ModelVisual3D.Content>
-                            </ModelVisual3D>
-                        </ModelVisual3D.Children>
-                    </ModelVisual3D>
-                </Viewport3D>
+                <ht:HelixViewport3D x:Name="myView" ZoomExtentsWhenLoaded="True" ShowViewCube="False">
+                    <!-- Remember to add light to the scene -->
+                    <ht:SunLight/>
+                    <ModelVisual3D x:Name="model"/>
+                    <!-- You can also add elements here in the xaml -->
+                </ht:HelixViewport3D>
             </Viewbox>
             <lvc:CartesianChart Grid.Column="2" Name="AccelerationChart" DisableAnimations="True" DataTooltip="{x:Null}" Hoverable="False" Width="280" Height="200" LegendLocation="Bottom">
                 <lvc:CartesianChart.ChartLegend>

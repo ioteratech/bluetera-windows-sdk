@@ -19,6 +19,7 @@ using Bluetera.Utilities;
 using Windows.Devices.Bluetooth;
 using Windows.Devices.Bluetooth.GenericAttributeProfile;
 using LiveCharts;
+using HelixToolkit.Wpf;
 
 namespace HelloBlueteraWpf
 {
@@ -33,6 +34,13 @@ namespace HelloBlueteraWpf
         {
             InitializeComponent();
 
+            // Model
+            ObjReader CurrentHelixObjReader = new ObjReader();
+            //model.Content = CurrentHelixObjReader.Read(@"D:\Users\Boaz\Desktop\temp\Airplane_v2_L2.123c9fd3dbfa-7118-4fde-af56-f04ef61f45dd\11804_Airplane_v2_l2.obj");
+            model.Content = CurrentHelixObjReader.Read(@"D:\Users\Boaz\Desktop\temp\Brown_Betty_Teapot_v1_L1.123c0890bb91-c798-45a4-8c00-bdb74366c50e\20900_Brown_Betty_Teapot_v1.obj");
+
+
+            // Graph
             AccelerationValues_X = new ChartValues<double>();
             AccelerationValues_Y = new ChartValues<double>();
             AccelerationValues_Z = new ChartValues<double>();
@@ -261,7 +269,8 @@ namespace HelloBlueteraWpf
 
                             // change coordinates and apply rotation - see note (2) at the end of this file                            
                             _qt = new Quaternion(qb.Y, qb.Z, qb.X, qb.W);
-                            CubeModel.Transform = new RotateTransform3D(new QuaternionRotation3D(_q0 * _qt));   // we multiple by q0 to apply 'reset cube' operation
+                            //CubeModel.Transform = new RotateTransform3D(new QuaternionRotation3D(_q0 * _qt));   // we multiple by q0 to apply 'reset cube' operation
+                            model.Transform = new RotateTransform3D(new QuaternionRotation3D(_q0 * _qt));   // we multiple by q0 to apply 'reset cube' operation
 
                             // update Euler angles
                             var angles = qb.GetEuelerAngles();
