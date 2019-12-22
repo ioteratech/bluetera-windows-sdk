@@ -9,13 +9,19 @@ namespace HelloBlueteraWpf
 {
     class DataRateMeter
     {
-        private const double alpha = 5e-2;
+        private const double alpha = 0.1;
         private const double secondsPerTick = 1e-3;
 
         private uint _prevTimestamp = 0;
         private double _averageDataInterval = Double.NaN;
 
-        public double DataRate { get { return 1.0 / _averageDataInterval; } }
+        public double DataRate {
+            get
+            {
+                double dataRate = 1.0 / _averageDataInterval;
+                return Double.IsNaN(dataRate) ? 0.0 : dataRate;
+            }
+        }
 
         public void Reset()
         {

@@ -31,6 +31,7 @@ namespace HelloBlueteraWpf
 
         #region Fields
         private DataRateMeter _dataRateMeter = new DataRateMeter();
+        private uint _odr = 10;
         #endregion
 
         #region Lifecycle
@@ -43,12 +44,14 @@ namespace HelloBlueteraWpf
             model.Content = CurrentHelixObjReader.Read(@"D:\Users\Boaz\Desktop\temp\Airplane_v2_L2.123c9fd3dbfa-7118-4fde-af56-f04ef61f45dd\11804_Airplane_v2_l2.obj");
             //model.Content = CurrentHelixObjReader.Read(@"D:\Users\Boaz\Desktop\temp\Brown_Betty_Teapot_v1_L1.123c0890bb91-c798-45a4-8c00-bdb74366c50e\20900_Brown_Betty_Teapot_v1.obj");
 
-
             // Graph
             AccelerationValues_X = new ChartValues<double>();
             AccelerationValues_Y = new ChartValues<double>();
             AccelerationValues_Z = new ChartValues<double>();
             AccelerationYFormatter = value => value.ToString("0.0");
+
+            // Data Rate Gauge
+            DataRateGauge.AnimationsSpeed = new TimeSpan(0, 0, 0, 0, 100);
 
             DataContext = this;
         }
@@ -224,11 +227,12 @@ namespace HelloBlueteraWpf
                     _bluetera.ConnectionStatusChanged += _bluetera_ConnectionStatusChanged;
                     _bluetera.DownlinkMessageReceived += _bluetera_DownlinkMessageReceived;
 
-                    ApplicationState = ApplicationStateType.Connected;
-                    UpdateControls();
-
                     // Start IMU. Methods will throw on failure
                     await StartImu();
+
+                    // update UI
+                    ApplicationState = ApplicationStateType.Connected;
+                    UpdateControls();                    
                 }
                 catch (BlueteraException ex)
                 {
@@ -359,7 +363,7 @@ namespace HelloBlueteraWpf
                     Start = new ImuStart()
                     {
                         DataTypes = (uint)(ImuDataType.Accelerometer | ImuDataType.Quaternion), // ImuDataType are enum flags - logically 'OR' to combine several types
-                        Odr = 20,                                                               // Output Data Rate [Hz] - see note (1) at the end of this file before changing this value
+                        Odr = _odr,                                                             // Output Data Rate [Hz] - see note (1) at the end of this file before changing this value
                         AccFsr = 4,                                                             // Acceleromenter Full Scale Range [g]
                         GyroFsr = 500                                                           // Gyroscope Full Scale Range [deg/sec]
                     }
@@ -389,7 +393,24 @@ namespace HelloBlueteraWpf
                 throw new BlueteraException($"Operation failed. Status = {GattCommunicationStatus.Success}");
         }
         #endregion
+
         #endregion
+
+        private async void RateUpButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (_odr <= 990)
+                _odr += 10;
+
+            await StartImu();
+    }
+
+        private async void RateDownButton_Click(object sender, RoutedEventArgs e)
+        {
+            if(_odr >= 20)
+                _odr -= 10;
+
+            await StartImu();
+        }
     }
 }
 

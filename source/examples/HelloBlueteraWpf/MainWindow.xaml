@@ -36,7 +36,7 @@
                     </MultiBinding>
                 </TextBlock.Text>
             </TextBlock>
-            <Viewbox Grid.Column="1" ClipToBounds="True" Width="300" Height="300">
+            <Viewbox Grid.Column="1" ClipToBounds="True" Width="300" Height="400">
                 <ht:HelixViewport3D x:Name="myView" ZoomExtentsWhenLoaded="True" ShowViewCube="False">
                     <!-- Remember to add light to the scene -->
                     <ht:SunLight/>
@@ -44,34 +44,60 @@
                     <!-- You can also add elements here in the xaml -->
                 </ht:HelixViewport3D>
             </Viewbox>
-            <lvc:CartesianChart Grid.Column="2" Name="AccelerationChart" DisableAnimations="True" DataTooltip="{x:Null}" Hoverable="False" Width="280" Height="200" LegendLocation="Bottom">
-                <lvc:CartesianChart.ChartLegend>
-                    <lvc:DefaultLegend BulletSize="20" Foreground="White"/>
-                </lvc:CartesianChart.ChartLegend>
-                <lvc:CartesianChart.Series>
-                    <lvc:LineSeries Values="{Binding AccelerationValues_X}" Fill="Transparent" LineSmoothness="0.5" ScalesYAt="0" Title="X" Stroke="DodgerBlue" PointGeometrySize="0" PointGeometry="{x:Static lvc:DefaultGeometries.None}"/>
-                    <lvc:LineSeries Values="{Binding AccelerationValues_Y}" Fill="Transparent" LineSmoothness="0.5" ScalesYAt="0" Title="Y" Stroke="OrangeRed" PointGeometrySize="0" PointGeometry="{x:Static lvc:DefaultGeometries.None}"/>
-                    <lvc:LineSeries Values="{Binding AccelerationValues_Z}" Fill="Transparent" LineSmoothness="0.5" ScalesYAt="0" Title="Z" Stroke="LawnGreen" PointGeometry="{x:Static lvc:DefaultGeometries.None}"/>
-                </lvc:CartesianChart.Series>
-                <lvc:CartesianChart.AxisX>
-                    <lvc:Axis MaxValue="100" ShowLabels="False">
-                        <lvc:Axis.Separator>
-                            <lvc:Separator Stroke="Transparent"/>
-                        </lvc:Axis.Separator>
-                    </lvc:Axis>
-                </lvc:CartesianChart.AxisX>
-                <lvc:CartesianChart.AxisY>
-                    <lvc:Axis Title="Acceleration" LabelFormatter="{Binding AccelerationYFormatter}" Foreground="White" />
-                </lvc:CartesianChart.AxisY>
-            </lvc:CartesianChart>
+            <StackPanel Orientation="Vertical" Grid.Column="2">
+                <lvc:CartesianChart Name="AccelerationChart" 
+                                    Grid.Column="2" 
+                                    Width="280" Height="250" Margin="0,10,0,0"
+                                    DisableAnimations="True" DataTooltip="{x:Null}" Hoverable="False"  LegendLocation="Bottom">
+                    <lvc:CartesianChart.ChartLegend>
+                        <lvc:DefaultLegend BulletSize="20" Foreground="White"/>
+                    </lvc:CartesianChart.ChartLegend>
+                    <lvc:CartesianChart.Series>
+                        <lvc:LineSeries Values="{Binding AccelerationValues_X}" Fill="Transparent" LineSmoothness="0.5" ScalesYAt="0" Title="X" Stroke="DodgerBlue" PointGeometrySize="0" PointGeometry="{x:Static lvc:DefaultGeometries.None}"/>
+                        <lvc:LineSeries Values="{Binding AccelerationValues_Y}" Fill="Transparent" LineSmoothness="0.5" ScalesYAt="0" Title="Y" Stroke="OrangeRed" PointGeometrySize="0" PointGeometry="{x:Static lvc:DefaultGeometries.None}"/>
+                        <lvc:LineSeries Values="{Binding AccelerationValues_Z}" Fill="Transparent" LineSmoothness="0.5" ScalesYAt="0" Title="Z" Stroke="LawnGreen" PointGeometry="{x:Static lvc:DefaultGeometries.None}"/>
+                    </lvc:CartesianChart.Series>
+                    <lvc:CartesianChart.AxisX>
+                        <lvc:Axis MaxValue="100" ShowLabels="False">
+                            <lvc:Axis.Separator>
+                                <lvc:Separator Stroke="Transparent"/>
+                            </lvc:Axis.Separator>
+                        </lvc:Axis>
+                    </lvc:CartesianChart.AxisX>
+                    <lvc:CartesianChart.AxisY>
+                        <lvc:Axis Title="Acceleration" LabelFormatter="{Binding AccelerationYFormatter}" Foreground="White" />
+                    </lvc:CartesianChart.AxisY>
+                </lvc:CartesianChart>
+                <lvc:AngularGauge Name="DataRateGauge" Value="{Binding DataRate}" 
+                          Width="150" Height="150" Margin="0,10,0,0"
+                          FromValue="0" ToValue="200" 
+                          LabelsStep="50" TicksStep="25" Wedge="200"
+                          TicksForeground="White" Foreground="White" 
+                          FontWeight="Bold" FontSize="16"
+                          SectionsInnerRadius=".8">
+                    <lvc:AngularGauge.Sections>
+                        <lvc:AngularSection FromValue="0" ToValue="200" Fill="#CF32C6F4"/>
+                    </lvc:AngularGauge.Sections>
+                    <!--<lvc:AngularGauge.Sections>
+                        <lvc:AngularSection FromValue="0" ToValue="200" Fill="#F8A725"/>
+                        -->
+                    <!--<lvc:AngularSection FromValue="200" ToValue="250" Fill="#FF3939"/>-->
+                    <!--
+                    </lvc:AngularGauge.Sections>-->
+                </lvc:AngularGauge>
+            </StackPanel>
         </Grid>
         <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition />
                 <ColumnDefinition />
+                <ColumnDefinition />
+                <ColumnDefinition />
             </Grid.ColumnDefinitions>
             <Button x:Name="StartStopButton" Content="Start" Width="100" Height="30" Grid.Column="0" Margin="5,5,10,5" HorizontalAlignment="Right" Click="StartStopButton_Click"/>
             <Button x:Name="SetHeadingButton" Content="Set Heading" Width="100" Height="30" Grid.Column="1" Margin="10,5,5,5" HorizontalAlignment="Left" Click="SetHeadingButton_Click"/>
+            <Button x:Name="RateUpButton" Content="Rate &#x25B2;" Width="100" Height="30" Grid.Column="2" Margin="10,5,5,5" HorizontalAlignment="Right" Click="RateUpButton_Click"/>
+            <Button x:Name="RateDownButton" Content="Rate &#x25BC;" Width="100" Height="30" Grid.Column="3" Margin="10,5,5,5" HorizontalAlignment="Left" Click="RateDownButton_Click"/>
         </Grid>
         <Grid x:Name="StatusBar">
             <Grid.ColumnDefinitions>
