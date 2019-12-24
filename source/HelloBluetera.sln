@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HelloBlueteraWinRt", "examp
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HelloBlueteraWpf", "examples\HelloBlueteraWpf\HelloBlueteraWpf.csproj", "{A462E67B-317B-489B-984F-5402FF0010DB}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Wrapper", "examples\Wrapper\Wrapper.csproj", "{5594BE5D-8450-407F-ABC9-E182190393EB}"
+EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		sdk\BlueteraSdk.projitems*{0fa4ea4c-8b81-4fc7-b788-ef1a3194a56c}*SharedItemsImports = 13
@@ -28,6 +30,10 @@ Global
 		{A462E67B-317B-489B-984F-5402FF0010DB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A462E67B-317B-489B-984F-5402FF0010DB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A462E67B-317B-489B-984F-5402FF0010DB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5594BE5D-8450-407F-ABC9-E182190393EB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5594BE5D-8450-407F-ABC9-E182190393EB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5594BE5D-8450-407F-ABC9-E182190393EB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5594BE5D-8450-407F-ABC9-E182190393EB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
