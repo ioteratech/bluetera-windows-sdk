@@ -14,6 +14,7 @@ using Google.Protobuf;
 using System.Runtime.InteropServices.WindowsRuntime;
 using System.Diagnostics;
 using Bluetera.Utilities;
+using Bluetera.Types;
 
 namespace Bluetera
 {

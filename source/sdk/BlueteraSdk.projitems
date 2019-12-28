@@ -9,10 +9,19 @@
     <Import_RootNamespace>Bluetera</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="$(MSBuildThisFileDirectory)BlueteraException.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)BlueteraSdk.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)BlueteraConstants.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)BlueteraDevice.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)BlueteraUtilities.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Types\BluetoothTypes.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Types\BlueteraException.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Windows\BlueteraSdk.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Types\BlueteraConstants.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Windows\BlueteraDevice.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Utilities\BlueteraUtilities.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Types\IBlueteraDevice.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Types\IBlueteraManager.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="$(MSBuildThisFileDirectory)Windows\" />
+    <Folder Include="$(MSBuildThisFileDirectory)Iotera\" />
+    <Folder Include="$(MSBuildThisFileDirectory)Utilities\" />
+    <Folder Include="$(MSBuildThisFileDirectory)Types\" />
   </ItemGroup>
 </Project>

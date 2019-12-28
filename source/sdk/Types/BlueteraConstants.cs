@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Bluetera
+namespace Bluetera.Types
 {
     internal class BlueteraConstants
     {

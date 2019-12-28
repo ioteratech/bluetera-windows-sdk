@@ -20,6 +20,7 @@ using Windows.Devices.Bluetooth;
 using Windows.Devices.Bluetooth.GenericAttributeProfile;
 using LiveCharts;
 using HelixToolkit.Wpf;
+using Bluetera.Types;
 
 namespace HelloBlueteraWpf
 {
