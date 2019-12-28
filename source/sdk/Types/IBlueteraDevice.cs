@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 using Windows.Foundation;
-using Bluetera.Types;
 
 namespace Bluetera.Types
 {
@@ -12,6 +11,7 @@ namespace Bluetera.Types
         #region Properties
         string Id { get; }
         ulong Address { get; }
+        string AddressAsString { get; }
         string HardwareVersion { get; }
         string FirmwareVersion { get; }
         ConnectionStatus ConnectionStatus { get; }

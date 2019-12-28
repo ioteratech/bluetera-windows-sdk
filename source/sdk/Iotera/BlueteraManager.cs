@@ -35,6 +35,7 @@ namespace Bluetera.Iotera
         private NativeSdkWrapper.OnDeviceDiscovered _onDeviceDiscoveredDelegate = new NativeSdkWrapper.OnDeviceDiscovered(OnDeviceDiscoveredInternal);
         private NativeSdkWrapper.OnDeviceConnected _onDeviceConnectedDelegate = new NativeSdkWrapper.OnDeviceConnected(OnDeviceConnectedInternal);
         private NativeSdkWrapper.OnDeviceDisconnected _onDeviceDisconnectedDelegate = new NativeSdkWrapper.OnDeviceDisconnected(OnDeviceDisconnectedInternal);
+        private NativeSdkWrapper.OnUartTx _onUartTx = new NativeSdkWrapper.OnUartTx(OnUartTx);
 
         private static void OnDeviceDiscoveredInternal(string addr)
         {
@@ -49,10 +50,12 @@ namespace Bluetera.Iotera
 
         private static void OnDeviceConnectedInternal(string addrStr)
         {
+            Console.WriteLine("OnDeviceConnectedInternal");
+
             ulong addr = BlueteraUtilities.StringAddresssAsUlong(addrStr);
 
             // create and hook up device
-            BlueteraDevice device = new BlueteraDevice(addr);
+            BlueteraDevice device = new BlueteraDevice(addr);            
 
             // add to tracked devices            
             Instance._connectedDevices.TryAdd(addr, device);
@@ -69,7 +72,17 @@ namespace Bluetera.Iotera
 
             BlueteraDevice device;
             if (Instance._connectedDevices.TryRemove(addr, out device))
-                device.NotifyConnectionStatusChanged(ConnectionStatus.Disconnected);
+                device.OnConnectionStatusChanged(ConnectionStatus.Disconnected);
+        }
+
+        private static void OnUartTx(string addrStr, byte[] data, ushort length)
+        {
+            if (data == null || length == 0)
+                return;
+
+            BlueteraDevice device;
+            if(Instance._connectedDevices.TryGetValue(BlueteraUtilities.StringAddresssAsUlong(addrStr), out device))
+                device.OnUartTx(data, length);
         }
         #endregion
 
@@ -107,7 +120,10 @@ namespace Bluetera.Iotera
             if (status != NativeSdkWrapper.StatusCode.Success)
                 throw new BlueteraException("Native SDK initialization failed");
 
-
+            NativeSdkWrapper.SetOnDeviceDiscovered(_onDeviceDiscoveredDelegate);
+            NativeSdkWrapper.SetOnDeviceConnected(_onDeviceConnectedDelegate);
+            NativeSdkWrapper.SetOnDeviceDisconnected(_onDeviceDisconnectedDelegate);
+            NativeSdkWrapper.SetOnUartTx(_onUartTx);
         }
         #endregion
     }
@@ -150,7 +166,7 @@ namespace Bluetera.Iotera
         public delegate void OnDeviceDisconnected(string addr);
 
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-        public delegate void OnUartTx([MarshalAs(UnmanagedType.LPArray, SizeParamIndex = 1)]byte[] data, ushort length);
+        public delegate void OnUartTx([MarshalAs(UnmanagedType.LPStr)] string addr, [MarshalAs(UnmanagedType.LPArray, SizeParamIndex = 2)]byte[] data, ushort length);
 
         [DllImport(DLLName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "IOTE_Initialize")]
         public static extern StatusCode Initialize();
@@ -174,7 +190,7 @@ namespace Bluetera.Iotera
         public static extern StatusCode SetOnDeviceDisconnected(OnDeviceDisconnected func);
 
         [DllImport(DLLName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "IOTE_SetOnUartTx")]
-        public static extern StatusCode SetOnUartTx(string addr, OnUartTx func);
+        public static extern StatusCode SetOnUartTx(OnUartTx func);
 
         [DllImport(DLLName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "IOTE_StartScan")]
         public static extern StatusCode StartScan(bool filter = true);

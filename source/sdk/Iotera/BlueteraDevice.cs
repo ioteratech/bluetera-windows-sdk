@@ -13,12 +13,14 @@ namespace Bluetera.Iotera
     public class BlueteraDevice : IBlueteraDevice
     {
         #region Fields
+        private NativeSdkWrapper.OnUartTx _onUartTxDelegate;
         private List<byte> _rxData = new List<byte>();
         #endregion
 
         #region Properties
         public string Id { get; }   // TODO: implement
         public ulong Address { get; private set; }
+        public string AddressAsString { get { return BlueteraUtilities.UlongAddressAsString(Address); }}
         public string HardwareVersion { get; }   // TODO: implement
         public string FirmwareVersion { get; }   // TODO: implement
         public ConnectionStatus ConnectionStatus { get; private set; }
@@ -32,7 +34,7 @@ namespace Bluetera.Iotera
         #region Methods
         public void Disconnect()
         {
-            NativeSdkWrapper.Disconnect(BlueteraUtilities.UlongAddressAsString(Address));
+            NativeSdkWrapper.Disconnect(AddressAsString);
         }
 
         public Task<bool> SendMessage(UplinkMessage msg)
@@ -45,7 +47,7 @@ namespace Bluetera.Iotera
                 byte[] buf = stream.ToArray();
                 return new Task<bool>(() =>
                 {
-                    NativeSdkWrapper.StatusCode status = NativeSdkWrapper.Write(BlueteraUtilities.UlongAddressAsString(Address), buf, (ushort)buf.Length);
+                    NativeSdkWrapper.StatusCode status = NativeSdkWrapper.Write(AddressAsString, buf, (ushort)buf.Length);
                     return (status == NativeSdkWrapper.StatusCode.Success);
                 });
             }
@@ -57,7 +59,7 @@ namespace Bluetera.Iotera
         #endregion
 
         #region Event Forwarding
-        private void OnUartTx(byte[] data, ushort length)
+        internal void OnUartTx(byte[] data, ushort length)
         {
             // enqueue new data           
             _rxData.AddRange(data);
@@ -79,7 +81,7 @@ namespace Bluetera.Iotera
             }
         }
 
-        internal void NotifyConnectionStatusChanged(ConnectionStatus status)
+        internal void OnConnectionStatusChanged(ConnectionStatus status)
         {
             ConnectionStatusChanged?.Invoke(this, status);
         }
@@ -88,8 +90,7 @@ namespace Bluetera.Iotera
         #region Lifecycle
         internal BlueteraDevice(ulong addr)
         {
-            Address = addr;
-            NativeSdkWrapper.SetOnUartTx(BlueteraUtilities.UlongAddressAsString(Address), new NativeSdkWrapper.OnUartTx(OnUartTx));
+            Address = addr;           
         }
         #endregion
     }
