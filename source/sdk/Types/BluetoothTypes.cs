@@ -14,6 +14,6 @@ namespace Bluetera.Types
     {
         // TODO: add properties
         public ulong Address { get; set; }
-        public int Rssi { get; set; }
+        public double Rssi { get; set; }
     }
 }
