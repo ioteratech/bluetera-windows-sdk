@@ -4,7 +4,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Windows.Foundation;
 
-namespace Bluetera.Types
+namespace Bluetera
 {
     public interface IBlueteraDevice
     {

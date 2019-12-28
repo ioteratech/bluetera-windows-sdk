@@ -6,7 +6,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using Windows.Foundation;
-using Bluetera.Types;
+using Bluetera;
 using Bluetera.Utilities;
 
 namespace Bluetera.Iotera

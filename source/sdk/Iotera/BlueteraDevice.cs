@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Windows.Foundation;
 using Google.Protobuf;
-using Bluetera.Types;
+using Bluetera;
 using Bluetera.Utilities;
 
 namespace Bluetera.Iotera

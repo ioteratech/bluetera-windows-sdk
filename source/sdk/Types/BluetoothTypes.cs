@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Bluetera.Types
+namespace Bluetera
 {
     public enum ConnectionStatus
     {

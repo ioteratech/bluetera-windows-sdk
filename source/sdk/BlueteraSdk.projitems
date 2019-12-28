@@ -11,6 +11,7 @@
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)Iotera\BlueteraDevice.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Iotera\BlueteraManager.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Types\BlueteraMessages.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Types\BluetoothTypes.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Types\BlueteraException.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Windows\BlueteraSdk.cs" />
@@ -23,7 +24,6 @@
   <ItemGroup>
     <Folder Include="$(MSBuildThisFileDirectory)Windows\" />
     <Folder Include="$(MSBuildThisFileDirectory)Utilities\" />
-    <Folder Include="$(MSBuildThisFileDirectory)Types\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="$(MSBuildThisFileDirectory)Iotera\lib\x64\sdk.dll" />

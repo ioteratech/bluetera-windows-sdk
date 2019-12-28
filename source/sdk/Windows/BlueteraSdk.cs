@@ -13,7 +13,7 @@ using Windows.Storage.Streams;
 using System.IO;
 using Google.Protobuf;
 using System.Runtime.InteropServices.WindowsRuntime;
-using Bluetera.Types;
+using Bluetera;
 
 namespace Bluetera
 {
