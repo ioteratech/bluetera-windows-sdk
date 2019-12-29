@@ -34,7 +34,7 @@ namespace Bluetera.Iotera
         #region Methods
         public void Disconnect()
         {
-            NativeSdkWrapper.Disconnect(AddressAsString);
+            NativeSdkWrapper.Disconnect(Address);
         }
 
         public Task<bool> SendMessage(UplinkMessage msg)
@@ -45,9 +45,9 @@ namespace Bluetera.Iotera
             if (stream.Position > 0)
             {
                 byte[] buf = stream.ToArray();
-                return new Task<bool>(() =>
+                return Task.Factory.StartNew(() =>
                 {
-                    NativeSdkWrapper.StatusCode status = NativeSdkWrapper.Write(AddressAsString, buf, (ushort)buf.Length);
+                    NativeSdkWrapper.StatusCode status = NativeSdkWrapper.Write(Address, buf, (ushort)buf.Length);
                     return (status == NativeSdkWrapper.StatusCode.Success);
                 });
             }
