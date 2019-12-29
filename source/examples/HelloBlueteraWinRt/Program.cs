@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Bluetera;
+using Bluetera.Windows;
 using Bluetera.Utilities;
 using Windows.Devices.Bluetooth;
 using Windows.Devices.Bluetooth.Advertisement;

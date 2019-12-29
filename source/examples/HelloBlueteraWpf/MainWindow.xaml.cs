@@ -13,14 +13,14 @@ using System.Windows.Input;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Windows.Media.Media3D;
-using Bluetera;
 using Windows.Devices.Bluetooth.Advertisement;
-using Bluetera.Utilities;
 using Windows.Devices.Bluetooth;
 using Windows.Devices.Bluetooth.GenericAttributeProfile;
 using LiveCharts;
 using HelixToolkit.Wpf;
 using Bluetera;
+using Bluetera.Windows;
+using Bluetera.Utilities;
 
 namespace HelloBlueteraWpf
 {
