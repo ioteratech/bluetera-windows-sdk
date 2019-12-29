@@ -16,7 +16,7 @@ using System.Diagnostics;
 using Bluetera.Utilities;
 using Bluetera;
 
-namespace Bluetera
+namespace Bluetera.Windows
 {
     public sealed class BlueteraDevice : IDisposable
     {

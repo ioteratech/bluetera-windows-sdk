@@ -15,7 +15,7 @@ using Google.Protobuf;
 using System.Runtime.InteropServices.WindowsRuntime;
 using Bluetera;
 
-namespace Bluetera
+namespace Bluetera.Windows
 {
     public sealed class BlueteraSdk
     {
