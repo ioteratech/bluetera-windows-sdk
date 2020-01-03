@@ -19,6 +19,11 @@ using Bluetera.Iotera;
 using LiveCharts;
 using HelixToolkit.Wpf;
 
+using NLog;
+using NLog.Config;
+using NLog.Targets;
+using NLog.Targets.Wrappers;
+
 namespace IoteraHelloBlueteraWpf
 {
     public partial class MainWindow : Window, INotifyPropertyChanged
@@ -30,6 +35,8 @@ namespace IoteraHelloBlueteraWpf
         #region Fields
         private DataRateMeter _dataRateMeter = new DataRateMeter();
         private uint _odr = 50;
+        private static Logger _qLogger = LogManager.GetLogger("QuaternionLogger");
+        private static Logger _aLogger = LogManager.GetLogger("AccLogger");
         #endregion
 
         #region Lifecycle
@@ -176,12 +183,14 @@ namespace IoteraHelloBlueteraWpf
                 case ApplicationStateType.Error:
                     StartStopButton.Content = "Start";
                     DeviceLabel.Content = "";
+                    DataRate = 0;
                     break;
 
                 case ApplicationStateType.Scanning:
                 case ApplicationStateType.Connecting:
                     StartStopButton.Content = "Stop";
                     DeviceLabel.Content = "";
+                    DataRate = 0;
                     break;
 
                 case ApplicationStateType.Connected:
@@ -283,6 +292,9 @@ namespace IoteraHelloBlueteraWpf
                 {
                     case DownlinkMessage.PayloadOneofCase.Quaternion:
                         {
+                            // log
+                            //_qLogger.Info(args.Quaternion.ToString());
+
                             // update rate meter
                             _dataRateMeter.Update(args.Quaternion.Timestamp);
                             DataRate = _dataRateMeter.DataRate;
@@ -308,8 +320,13 @@ namespace IoteraHelloBlueteraWpf
 
                     case DownlinkMessage.PayloadOneofCase.Acceleration:
 
-                        _dataRateMeter.Update(args.Acceleration.Timestamp);
-                        DataRate = _dataRateMeter.DataRate;
+                        // log
+                        //_qLogger.Info(args.Acceleration.ToString());
+
+                        //// update rate meter
+                        //_dataRateMeter.Update(args.Acceleration.Timestamp);
+                        //DataRate = _dataRateMeter.DataRate;
+
                         // Update chart
                         AccX = args.Acceleration.X;
                         AccelerationValues_X.Add(AccX);
