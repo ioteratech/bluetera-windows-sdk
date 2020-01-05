@@ -10,7 +10,7 @@ namespace Bluetera.Utilities
         public static string UlongAddressAsString(ulong addr, bool addColons = true)
         {
             string separator = addColons ? ":" : "";
-            var bytes = BitConverter.GetBytes(addr).Take(6).Reverse();
+            var bytes = BitConverter.GetBytes(addr).Take(6);
             return String.Join(separator, bytes.Select(b => String.Format("{0:X2}", b)));
         }
 
