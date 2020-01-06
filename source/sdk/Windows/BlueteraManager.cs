@@ -17,12 +17,12 @@ using Bluetera;
 
 namespace Bluetera.Windows
 {
-    public sealed class BlueteraManager
+    public sealed class BlueteraManager : IBlueteraManager
     {
         // Based on / Inspired by https://github.com/Microsoft/Windows-universal-samples.git
         #region Fields
         private ConcurrentBag<ulong> _devicesFound;
-        private ConcurrentDictionary<string, BlueteraDevice> _connectedDevices;
+        private ConcurrentDictionary<string, IBlueteraDevice> _connectedDevices;
         private BluetoothLEAdvertisementWatcher _advWatcher;
         private static readonly Lazy<BlueteraManager> _instance = new Lazy<BlueteraManager>(() => new BlueteraManager());
         #endregion
@@ -63,7 +63,7 @@ namespace Bluetera.Windows
 
             // create Bluetera wrapper
             bluetera = new BlueteraDevice(device);
-            bluetera.ConnectionStatusChanged += _bluetera_ConnectionStatusChanged;
+            bluetera.ConnectionStatusChanged += Bluetera_ConnectionStatusChanged; ;
 
             // non-UWP applications (console, WPF, etc.) should use the auto-pair with the device, or the pairing result will be 'RequiredHandlerNotRegistered'
             // see e.g. https://stackoverflow.com/questions/45191412/deviceinformation-pairasync-not-working-in-wpf/45196036#45196036
@@ -107,15 +107,15 @@ namespace Bluetera.Windows
             AdvertismentReceived?.Invoke(sender, args);
         }
 
-        private void _bluetera_ConnectionStatusChanged(BlueteraDevice sender, BluetoothConnectionStatus args)
+        private void Bluetera_ConnectionStatusChanged(IBlueteraDevice sender, ConnectionStatus args)
         {
-            if (args == BluetoothConnectionStatus.Connected)
+            if (args == ConnectionStatus.Connected)
             {
                 _connectedDevices.TryAdd(sender.Id, sender);
             }
             else
             {
-                BlueteraDevice dummy;
+                IBlueteraDevice dummy;
                 _connectedDevices.TryRemove(sender.Id, out dummy);
             }
         }
@@ -128,13 +128,31 @@ namespace Bluetera.Windows
             _advWatcher.ScanningMode = BluetoothLEScanningMode.Active;
             _advWatcher.Received += _advWatcher_Received;
 
-            _connectedDevices = new ConcurrentDictionary<string, BlueteraDevice>();
+            _connectedDevices = new ConcurrentDictionary<string, IBlueteraDevice>();
+        }
+
+        event TypedEventHandler<IBlueteraManager, BlueteraAdvertisement> IBlueteraManager.AdvertismentReceived
+        {
+            add
+            {
+                throw new NotImplementedException();
+            }
+
+            remove
+            {
+                throw new NotImplementedException();
+            }
         }
 
         public void DisposeAll()
         {
-            foreach (var device in _connectedDevices.Values)
-                device.Dispose();
+            //foreach (var device in _connectedDevices.Values)
+            //    device.Dispose();
+        }
+
+        Task<IBlueteraDevice> IBlueteraManager.Connect(ulong addr, bool autopair)
+        {
+            throw new NotImplementedException();
         }
         #endregion
     }

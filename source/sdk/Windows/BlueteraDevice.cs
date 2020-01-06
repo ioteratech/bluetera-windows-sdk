@@ -18,7 +18,7 @@ using Bluetera;
 
 namespace Bluetera.Windows
 {
-    public sealed class BlueteraDevice : IDisposable
+    public sealed class BlueteraDevice : IBlueteraDevice, IDisposable
     {
         #region Fields
         private GattDeviceService _busService;     // Bluetera UART Service - see comment (1) at the end of this file
@@ -46,30 +46,34 @@ namespace Bluetera.Windows
             get { return BlueteraUtilities.UlongAddressAsString(Address); }
         }
 
-        public bool IsConnected
-        {
-            get { return (BaseDevice.ConnectionStatus == BluetoothConnectionStatus.Connected); }
-        }
-
         public string HardwareVersion { get; private set; }
 
         public string FirmwareVersion { get; private set; }
+
+        public ConnectionStatus ConnectionStatus {
+            get
+            {
+                return (BaseDevice.ConnectionStatus == BluetoothConnectionStatus.Connected) ? ConnectionStatus.Connected : ConnectionStatus.Disconnected;
+            }
+        }
         #endregion
 
         #region Events
-        public event TypedEventHandler<BlueteraDevice, BluetoothConnectionStatus> ConnectionStatusChanged;
-        public event TypedEventHandler<BlueteraDevice, DownlinkMessage> DownlinkMessageReceived;
+        public event TypedEventHandler<IBlueteraDevice, ConnectionStatus> ConnectionStatusChanged;
+        public event TypedEventHandler<IBlueteraDevice, DownlinkMessage> DownlinkMessageReceived;
         #endregion
 
         #region Methods
-        public async Task<GattCommunicationStatus> SendMessage(UplinkMessage msg)
+        public async Task<bool> SendMessage(UplinkMessage msg)
         {
             var stream = new MemoryStream();
             msg.WriteDelimitedTo(stream);
 
             if (stream.Position > 0)
             {
-                return await _busRxChar.WriteValueAsync(stream.ToArray().AsBuffer());
+                byte[] buf = stream.ToArray();
+                GattCommunicationStatus status = await _busRxChar.WriteValueAsync(stream.ToArray().AsBuffer());
+                return (status == GattCommunicationStatus.Success) ? true : false;
             }
             else
             {
@@ -94,9 +98,14 @@ namespace Bluetera.Windows
                 {
                     if (_busTxChar != null)
                         await _busTxChar.WriteClientCharacteristicConfigurationDescriptorAsync(GattClientCharacteristicConfigurationDescriptorValue.Notify);
-                }
 
-                ConnectionStatusChanged?.Invoke(this, sender.ConnectionStatus);
+                    ConnectionStatusChanged?.Invoke(this, ConnectionStatus.Connected);
+                }
+                else
+                {
+                    ConnectionStatusChanged?.Invoke(this, ConnectionStatus.Disconnected);
+                }
+                
             }
             catch (Exception)
             {
@@ -172,7 +181,7 @@ namespace Bluetera.Windows
         internal BlueteraDevice(BluetoothLEDevice device)
         {
             BaseDevice = device;
-        }
+        }        
 
         internal async Task Connect()
         {
@@ -221,8 +230,8 @@ namespace Bluetera.Windows
             _busRxChar = null;
 
             _isDisposed = true;
-        }
-        #endregion        
+        }        
+        #endregion
     }
 }
 
