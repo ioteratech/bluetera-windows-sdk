@@ -14,7 +14,7 @@ namespace HelloBlueteraWinRt
 {
     class Program
     {
-        private static BlueteraDevice device;
+        private static IBlueteraDevice device;
         private static ulong lastAddress;
 
         static void Main(string[] args)
@@ -56,7 +56,7 @@ namespace HelloBlueteraWinRt
                         device = sdk.Connect(lastAddress, autopair: true).Result;   // Note: non-UWP apps (like this one) should set autopair:true. See BlueteraSdk.Connect() for more info
                         device.ConnectionStatusChanged += Device_ConnectionStatusChanged;
                         device.DownlinkMessageReceived += Device_DownlinkMessageReceived;
-                        Console.WriteLine($"Device connection status: {device.BaseDevice.ConnectionStatus}");
+                        Console.WriteLine($"Device connection status: {device.ConnectionStatus}");
                         break;
 
                     case 'd':
@@ -110,21 +110,21 @@ namespace HelloBlueteraWinRt
             sdk.DisposeAll();
         }
 
-        private static void Device_ConnectionStatusChanged(BlueteraDevice sender, BluetoothConnectionStatus args)
+        private static void Device_ConnectionStatusChanged(IBlueteraDevice sender, ConnectionStatus args)
         {
             Console.WriteLine($"Connection status changed. Device = {sender.AddressAsString}, Status = {args}");
-            if (args == BluetoothConnectionStatus.Connected)
+            if (args == ConnectionStatus.Connected)
             {
                 device = sender;
             }
             else
             {
-                device.Dispose();
+                //device.Dispose();
                 device = null;
             }
         }
 
-        private static void Device_DownlinkMessageReceived(BlueteraDevice sender, DownlinkMessage args)
+        private static void Device_DownlinkMessageReceived(IBlueteraDevice sender, DownlinkMessage args)
         {
             Console.WriteLine($"Recevied message: {args.ToString()}");
         }
@@ -135,7 +135,7 @@ namespace HelloBlueteraWinRt
             lastAddress = args.BluetoothAddress;
         }
 
-        private static async Task<GattCommunicationStatus> SendEcho()
+        private static async Task<bool> SendEcho()
         {
             UplinkMessage msg = new UplinkMessage()
             {
@@ -148,7 +148,7 @@ namespace HelloBlueteraWinRt
             return await device.SendMessage(msg);
         }
 
-        private static async Task<GattCommunicationStatus> StartImu()
+        private static async Task<bool> StartImu()
         {
             UplinkMessage msg = new UplinkMessage()
             {
@@ -167,7 +167,7 @@ namespace HelloBlueteraWinRt
             return await device.SendMessage(msg);
         }
 
-        private static async Task<GattCommunicationStatus> StartLogging()
+        private static async Task<bool> StartLogging()
         {
             UplinkMessage msg = new UplinkMessage()
             {
@@ -188,7 +188,7 @@ namespace HelloBlueteraWinRt
         }
 
 
-        private static async Task<GattCommunicationStatus> StopImu()
+        private static async Task<bool> StopImu()
         {
             UplinkMessage stopImuMsg = new UplinkMessage()
             {
