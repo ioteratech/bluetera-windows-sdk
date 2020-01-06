@@ -13,14 +13,18 @@ using System.Windows.Input;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Windows.Media.Media3D;
-using Windows.Devices.Bluetooth.Advertisement;
-using Windows.Devices.Bluetooth;
-using Windows.Devices.Bluetooth.GenericAttributeProfile;
 using LiveCharts;
 using HelixToolkit.Wpf;
+
 using Bluetera;
-using Bluetera.Windows;
 using Bluetera.Utilities;
+//using Bluetera.Windows; // To use Windows native BLE, uncomment this line and comment the next oune
+using Bluetera.Iotera; // Recommended - To use Iotera's driver, uncomment this line and comment the previous one
+
+using NLog;
+using NLog.Config;
+using NLog.Targets;
+using NLog.Targets.Wrappers;
 
 namespace HelloBlueteraWpf
 {
@@ -32,7 +36,9 @@ namespace HelloBlueteraWpf
 
         #region Fields
         private DataRateMeter _dataRateMeter = new DataRateMeter();
-        private uint _odr = 10;
+        private uint _odr = 50;
+        private static Logger _qLogger = LogManager.GetLogger("QuaternionLogger");
+        private static Logger _aLogger = LogManager.GetLogger("AccLogger");
         #endregion
 
         #region Lifecycle
@@ -61,12 +67,13 @@ namespace HelloBlueteraWpf
         {
             base.OnSourceInitialized(e);
 
-            _sdk = BlueteraManager.Instance;
-            _sdk.AdvertismentReceived += _sdk_AdvertismentReceived;
+            _btManager = BlueteraManager.Instance;
+            _btManager.AdvertismentReceived += _btManager_AdvertismentReceived;
 
             ApplicationState = ApplicationStateType.Idle;
             UpdateControls();
         }
+
         #endregion
 
         #region UI
@@ -76,7 +83,7 @@ namespace HelloBlueteraWpf
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
-        #endregion        
+        #endregion
 
         #region Bound Properties
         // Status bar
@@ -149,7 +156,7 @@ namespace HelloBlueteraWpf
         {
             if ((ApplicationState == ApplicationStateType.Idle) || (ApplicationState == ApplicationStateType.Error))
             {   // Button is 'Start'
-                _sdk.StartScan();
+                _btManager.StartScan();
 
                 // Update UI
                 ApplicationState = ApplicationStateType.Scanning;
@@ -178,12 +185,14 @@ namespace HelloBlueteraWpf
                 case ApplicationStateType.Error:
                     StartStopButton.Content = "Start";
                     DeviceLabel.Content = "";
+                    DataRate = 0;
                     break;
 
                 case ApplicationStateType.Scanning:
                 case ApplicationStateType.Connecting:
                     StartStopButton.Content = "Stop";
                     DeviceLabel.Content = "";
+                    DataRate = 0;
                     break;
 
                 case ApplicationStateType.Connected:
@@ -202,12 +211,12 @@ namespace HelloBlueteraWpf
         private Quaternion _qbm = Quaternion.Identity;
         private Quaternion _q0 = Quaternion.Identity;
         private Quaternion _qt = Quaternion.Identity;
-        private BlueteraManager _sdk;
-        private BlueteraDevice _bluetera;
+        private BlueteraManager _btManager;
+        private IBlueteraDevice _bluetera;
         #endregion
 
         #region Event Handlers
-        private void _sdk_AdvertismentReceived(BluetoothLEAdvertisementWatcher sender, BluetoothLEAdvertisementReceivedEventArgs args)
+        private void _btManager_AdvertismentReceived(IBlueteraManager sender, BlueteraAdvertisement args)
         {
             Dispatcher.InvokeAsync(async () =>
             {
@@ -217,14 +226,14 @@ namespace HelloBlueteraWpf
                     if (ApplicationState != ApplicationStateType.Scanning)
                         return;
 
-                    _sdk.StopScan();
+                    _btManager.StopScan();
 
                     _dataRateMeter.Reset();
                     ApplicationState = ApplicationStateType.Connecting;
                     UpdateControls();
 
                     // Try connecting to Bluetera                    
-                    _bluetera = await _sdk.Connect(args.BluetoothAddress, true);  // This method will either connect or throw
+                    _bluetera = await _btManager.Connect(args.Address);  // This method will either connect or throw
                     _bluetera.ConnectionStatusChanged += _bluetera_ConnectionStatusChanged;
                     _bluetera.DownlinkMessageReceived += _bluetera_DownlinkMessageReceived;
 
@@ -233,15 +242,12 @@ namespace HelloBlueteraWpf
 
                     // update UI
                     ApplicationState = ApplicationStateType.Connected;
-                    UpdateControls();                    
+                    UpdateControls();
                 }
                 catch (BlueteraException ex)
                 {
-                    if (_bluetera != null)
-                    {
-                        _bluetera.Dispose();
-                        _bluetera = null;
-                    }
+                    _bluetera?.Disconnect();
+                    _bluetera = null;
 
                     ApplicationState = ApplicationStateType.Error;
                     UpdateControls();
@@ -249,7 +255,7 @@ namespace HelloBlueteraWpf
             });
         }
 
-        private void _bluetera_ConnectionStatusChanged(IBlueteraDevice sender, BluetoothConnectionStatus args)
+        private void _bluetera_ConnectionStatusChanged(IBlueteraDevice sender, ConnectionStatus args)
         {
             Dispatcher.Invoke(async () =>
             {
@@ -260,7 +266,7 @@ namespace HelloBlueteraWpf
                         return;
 
                     // re-enable IMU
-                    if (args == BluetoothConnectionStatus.Connected)
+                    if (args == ConnectionStatus.Connected)
                     {
                         await StartImu();
                         ApplicationState = ApplicationStateType.Connected;
@@ -288,6 +294,9 @@ namespace HelloBlueteraWpf
                 {
                     case DownlinkMessage.PayloadOneofCase.Quaternion:
                         {
+                            // log
+                            //_qLogger.Info(args.Quaternion.ToString());
+
                             // update rate meter
                             _dataRateMeter.Update(args.Quaternion.Timestamp);
                             DataRate = _dataRateMeter.DataRate;
@@ -312,6 +321,14 @@ namespace HelloBlueteraWpf
                         break;
 
                     case DownlinkMessage.PayloadOneofCase.Acceleration:
+
+                        // log
+                        //_qLogger.Info(args.Acceleration.ToString());
+
+                        //// update rate meter
+                        //_dataRateMeter.Update(args.Acceleration.Timestamp);
+                        //DataRate = _dataRateMeter.DataRate;
+
                         // Update chart
                         AccX = args.Acceleration.X;
                         AccelerationValues_X.Add(AccX);
@@ -338,14 +355,11 @@ namespace HelloBlueteraWpf
             try
             {
                 // Stop scanning - will be ignored if not relevant
-                _sdk.StopScan();
+                _btManager.StopScan();
 
                 // Dispose Bluetera device. Will disconnect if needed
-                if (_bluetera != null)
-                {
-                    _bluetera.Dispose();
-                    _bluetera = null;
-                }
+                _bluetera?.Disconnect();
+                _bluetera = null;
             }
             catch (Exception) { /* Ignore */}
 
@@ -390,8 +404,8 @@ namespace HelloBlueteraWpf
         private async Task SendOrThrow(UplinkMessage msg)
         {
             var status = await _bluetera.SendMessage(msg);
-            if (status != GattCommunicationStatus.Success)
-                throw new BlueteraException($"Operation failed. Status = {GattCommunicationStatus.Success}");
+            if (!status)
+                throw new BlueteraException($"Operation failed.");
         }
         #endregion
 
@@ -403,11 +417,11 @@ namespace HelloBlueteraWpf
                 _odr += 10;
 
             await StartImu();
-    }
+        }
 
         private async void RateDownButton_Click(object sender, RoutedEventArgs e)
         {
-            if(_odr >= 20)
+            if (_odr >= 20)
                 _odr -= 10;
 
             await StartImu();
