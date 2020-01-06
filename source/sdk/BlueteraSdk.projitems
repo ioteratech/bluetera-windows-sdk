@@ -14,7 +14,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Types\BlueteraMessages.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Types\BluetoothTypes.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Types\BlueteraException.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Windows\BlueteraSdk.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Windows\BlueteraManager.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Types\BlueteraConstants.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Windows\BlueteraDevice.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utilities\BlueteraUtilities.cs" />

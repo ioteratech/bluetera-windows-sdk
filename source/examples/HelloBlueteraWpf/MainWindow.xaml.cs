@@ -61,7 +61,7 @@ namespace HelloBlueteraWpf
         {
             base.OnSourceInitialized(e);
 
-            _sdk = BlueteraSdk.Instance;
+            _sdk = BlueteraManager.Instance;
             _sdk.AdvertismentReceived += _sdk_AdvertismentReceived;
 
             ApplicationState = ApplicationStateType.Idle;
@@ -202,7 +202,7 @@ namespace HelloBlueteraWpf
         private Quaternion _qbm = Quaternion.Identity;
         private Quaternion _q0 = Quaternion.Identity;
         private Quaternion _qt = Quaternion.Identity;
-        private BlueteraSdk _sdk;
+        private BlueteraManager _sdk;
         private BlueteraDevice _bluetera;
         #endregion
 

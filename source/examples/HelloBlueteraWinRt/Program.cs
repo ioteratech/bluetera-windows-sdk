@@ -25,7 +25,7 @@ namespace HelloBlueteraWinRt
             // - uncomment the relevant lines in the sdkConnect() method
             Console.WriteLine("Running");
 
-            BlueteraSdk sdk = BlueteraSdk.Instance;
+            BlueteraManager sdk = BlueteraManager.Instance;
             sdk.AdvertismentReceived += BlueteraDevice_AdvertismentReceived;
 
             bool running = true;

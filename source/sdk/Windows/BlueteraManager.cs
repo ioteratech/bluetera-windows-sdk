@@ -17,18 +17,18 @@ using Bluetera;
 
 namespace Bluetera.Windows
 {
-    public sealed class BlueteraSdk
+    public sealed class BlueteraManager
     {
         // Based on / Inspired by https://github.com/Microsoft/Windows-universal-samples.git
         #region Fields
         private ConcurrentBag<ulong> _devicesFound;
         private ConcurrentDictionary<string, BlueteraDevice> _connectedDevices;
         private BluetoothLEAdvertisementWatcher _advWatcher;
-        private static readonly Lazy<BlueteraSdk> _instance = new Lazy<BlueteraSdk>(() => new BlueteraSdk());
+        private static readonly Lazy<BlueteraManager> _instance = new Lazy<BlueteraManager>(() => new BlueteraManager());
         #endregion
 
         #region Properties
-        public static BlueteraSdk Instance
+        public static BlueteraManager Instance
         {
             get { return _instance.Value; }
         }
@@ -122,7 +122,7 @@ namespace Bluetera.Windows
         #endregion
 
         #region Lifecycle        
-        private BlueteraSdk()
+        private BlueteraManager()
         {
             _advWatcher = new BluetoothLEAdvertisementWatcher();        // TODO: use advertisment filters
             _advWatcher.ScanningMode = BluetoothLEScanningMode.Active;
