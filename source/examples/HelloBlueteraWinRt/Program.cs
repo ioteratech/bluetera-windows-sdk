@@ -110,6 +110,12 @@ namespace HelloBlueteraWinRt
             sdk.DisposeAll();
         }
 
+        private static void BlueteraDevice_AdvertismentReceived(IBlueteraManager sender, BlueteraAdvertisement args)
+        {
+            Console.WriteLine($"Bluetera found: {BlueteraUtilities.UlongAddressAsString(args.Address)}");
+            lastAddress = args.Address;
+        }
+
         private static void Device_ConnectionStatusChanged(IBlueteraDevice sender, ConnectionStatus args)
         {
             Console.WriteLine($"Connection status changed. Device = {sender.AddressAsString}, Status = {args}");
@@ -127,13 +133,7 @@ namespace HelloBlueteraWinRt
         private static void Device_DownlinkMessageReceived(IBlueteraDevice sender, DownlinkMessage args)
         {
             Console.WriteLine($"Recevied message: {args.ToString()}");
-        }
-
-        private static void BlueteraDevice_AdvertismentReceived(BluetoothLEAdvertisementWatcher sender, BluetoothLEAdvertisementReceivedEventArgs args)
-        {
-            Console.WriteLine($"Bluetera found: {BlueteraUtilities.UlongAddressAsString(args.BluetoothAddress)}");
-            lastAddress = args.BluetoothAddress;
-        }
+        }        
 
         private static async Task<bool> SendEcho()
         {

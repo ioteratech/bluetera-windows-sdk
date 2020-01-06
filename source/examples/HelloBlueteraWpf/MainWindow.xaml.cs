@@ -249,7 +249,7 @@ namespace HelloBlueteraWpf
             });
         }
 
-        private void _bluetera_ConnectionStatusChanged(BlueteraDevice sender, BluetoothConnectionStatus args)
+        private void _bluetera_ConnectionStatusChanged(IBlueteraDevice sender, BluetoothConnectionStatus args)
         {
             Dispatcher.Invoke(async () =>
             {
@@ -278,7 +278,7 @@ namespace HelloBlueteraWpf
             });
         }
 
-        private void _bluetera_DownlinkMessageReceived(BlueteraDevice sender, DownlinkMessage args)
+        private void _bluetera_DownlinkMessageReceived(IBlueteraDevice sender, DownlinkMessage args)
         {
             Dispatcher.Invoke(() =>
             {

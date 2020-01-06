@@ -35,7 +35,7 @@ namespace Bluetera.Windows
         #endregion
 
         #region Events
-        public event TypedEventHandler<BluetoothLEAdvertisementWatcher, BluetoothLEAdvertisementReceivedEventArgs> AdvertismentReceived;
+        public event TypedEventHandler<IBlueteraManager, BlueteraAdvertisement> AdvertismentReceived;
         #endregion
 
         #region Methods
@@ -102,9 +102,16 @@ namespace Bluetera.Windows
             if (_devicesFound.Contains(args.BluetoothAddress))
                 return;
 
-            // add and notify
+            // add to found devices
             _devicesFound.Add(args.BluetoothAddress);
-            AdvertismentReceived?.Invoke(sender, args);
+
+            // notify
+            BlueteraAdvertisement adv = new BlueteraAdvertisement()
+            {
+                Address = args.BluetoothAddress,
+                Rssi = (double)args.RawSignalStrengthInDBm
+            };
+            AdvertismentReceived?.Invoke(this, adv);
         }
 
         private void Bluetera_ConnectionStatusChanged(IBlueteraDevice sender, ConnectionStatus args)

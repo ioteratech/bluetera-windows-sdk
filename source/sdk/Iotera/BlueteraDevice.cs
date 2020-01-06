@@ -13,7 +13,6 @@ namespace Bluetera.Iotera
     public class BlueteraDevice : IBlueteraDevice
     {
         #region Fields
-        private NativeSdkWrapper.OnUartTx _onUartTxDelegate;
         private List<byte> _rxData = new List<byte>();
         #endregion
 

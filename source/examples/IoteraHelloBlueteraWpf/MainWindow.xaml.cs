@@ -13,11 +13,13 @@ using System.Windows.Input;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Windows.Media.Media3D;
-using Bluetera;
-using Bluetera.Utilities;
-using Bluetera.Iotera;
 using LiveCharts;
 using HelixToolkit.Wpf;
+
+using Bluetera;
+using Bluetera.Utilities;
+// using Bluetera.Windows; // To use Windows native BLE, uncomment this line, and comment the next oune
+using Bluetera.Iotera; // To use BLE dongle, uncomment this line, and comment the previous one (this is the recommended method)
 
 using NLog;
 using NLog.Config;
@@ -71,7 +73,7 @@ namespace IoteraHelloBlueteraWpf
             ApplicationState = ApplicationStateType.Idle;
             UpdateControls();
         }
-        
+
         #endregion
 
         #region UI
@@ -81,7 +83,7 @@ namespace IoteraHelloBlueteraWpf
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
-        #endregion        
+        #endregion
 
         #region Bound Properties
         // Status bar
@@ -347,7 +349,7 @@ namespace IoteraHelloBlueteraWpf
                 }
             });
         }
-                
+
         private void StopAll()
         {
             try
@@ -415,11 +417,11 @@ namespace IoteraHelloBlueteraWpf
                 _odr += 10;
 
             await StartImu();
-    }
+        }
 
         private async void RateDownButton_Click(object sender, RoutedEventArgs e)
         {
-            if(_odr >= 20)
+            if (_odr >= 20)
                 _odr -= 10;
 
             await StartImu();
