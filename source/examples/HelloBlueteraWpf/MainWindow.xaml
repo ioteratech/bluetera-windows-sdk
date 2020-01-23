@@ -68,7 +68,7 @@
                         <lvc:Axis Title="Acceleration" LabelFormatter="{Binding AccelerationYFormatter}" Foreground="White" />
                     </lvc:CartesianChart.AxisY>
                 </lvc:CartesianChart>
-                <lvc:AngularGauge Name="DataRateGauge" Value="{Binding DataRate}" 
+                <lvc:AngularGauge Name="DataRateGauge" Value="{Binding DataRate}"  Visibility="Collapsed"
                           Width="150" Height="150" Margin="0,10,0,0"
                           FromValue="0" ToValue="200" 
                           LabelsStep="50" TicksStep="25" Wedge="200"
