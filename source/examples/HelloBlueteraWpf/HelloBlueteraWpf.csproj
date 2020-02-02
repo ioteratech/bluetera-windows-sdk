@@ -125,6 +125,14 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <Content Include="..\resources\models\quadcopter\quadcopter.mtl">
+      <Link>models\quadcopter\quadcopter.mtl</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\resources\models\quadcopter\quadcopter.obj">
+      <Link>models\quadcopter\quadcopter.obj</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <None Include="NLog.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

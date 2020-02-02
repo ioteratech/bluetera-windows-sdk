@@ -47,10 +47,8 @@ namespace HelloBlueteraWpf
 
             // Model
             ObjReader CurrentHelixObjReader = new ObjReader();
-            //model.Content = CurrentHelixObjReader.Read(@"D:\dev\iotera\code\bluetera-windows-sdk\quadcopter\quadcopter.obj");
-            //model.Transform = new RotateTransform3D(new QuaternionRotation3D(new Quaternion(new Vector3D(1, 0, 0), 180)));
-            model.Content = CurrentHelixObjReader.Read(@"D:\Users\Boaz\Desktop\temp\Airplane_v2_L2.123c9fd3dbfa-7118-4fde-af56-f04ef61f45dd\11804_Airplane_v2_l2.obj");
-            //model.Content = CurrentHelixObjReader.Read(@"D:\Users\Boaz\Desktop\temp\Brown_Betty_Teapot_v1_L1.123c0890bb91-c798-45a4-8c00-bdb74366c50e\20900_Brown_Betty_Teapot_v1.obj");
+            model.Content = CurrentHelixObjReader.Read(@"models\quadcopter\quadcopter.obj");
+            
 
             // Graph
             AccelerationValues_X = new ChartValues<double>();
@@ -177,6 +175,22 @@ namespace HelloBlueteraWpf
             _q0 = (_q0.Inverse() * _qbm).Inverse();
         }
 
+        private async void RateUpButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (_odr <= 990)
+                _odr += 10;
+
+            await StartImu();
+        }
+
+        private async void RateDownButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (_odr >= 20)
+                _odr -= 10;
+
+            await StartImu();
+        }
+
         #region Helpers
         private void UpdateControls()
         {
@@ -296,30 +310,29 @@ namespace HelloBlueteraWpf
                     case DownlinkMessage.PayloadOneofCase.Quaternion:
                         {
                             // log
-                            //_qLogger.Info(args.Quaternion.ToString());
+                            _dataLogger.Info(args.Quaternion.ToString());
 
                             // update rate meter
                             _dataRateMeter.Update(args.Quaternion.Timestamp);
                             DataRate = _dataRateMeter.DataRate;
 
                             // raw Bluetera quaternion
-                            var qb = new Quaternion(args.Quaternion.X, args.Quaternion.Y, args.Quaternion.Z, args.Quaternion.W);
+                            var qRaw = new Quaternion(args.Quaternion.X, args.Quaternion.Y, args.Quaternion.Z, args.Quaternion.W);
 
-                            // change coordinates and apply rotation - see note (2) at the end of this file                            
-                            _qt = new Quaternion(qb.X, qb.Y, qb.Z, qb.W);
+                            // transform to WPF model coordinates
+                            _qt = new Quaternion(-qRaw.X, -qRaw.Y, qRaw.Z, qRaw.W);
 
-                            //var fix = new Quaternion(new Vector3D(1, 0 , 0), 180);
-
-                            //_qt = fix * _qt;
-
+                            // capture the first quanternion as q0
                             if (_q0.IsIdentity)
                                 _q0 = _qt.Inverse();
 
 
-                            model.Transform = new RotateTransform3D(new QuaternionRotation3D(_q0 * _qt * _qbm));   // we multiple by q0 to apply 'reset cube' operation
+                            // apply IMU-to-Body transform
+                            var qBody = _q0 * _qt * _qbm;
+                            model.Transform = new RotateTransform3D(new QuaternionRotation3D(qBody));
 
                             // update Euler angles
-                            var angles = qb.GetEuelerAngles();
+                            var angles = qBody.GetEuelerAngles();
                             Roll = angles[0];
                             Pitch = angles[1];
                             Yaw = angles[2];
@@ -415,23 +428,7 @@ namespace HelloBlueteraWpf
         }
         #endregion
 
-        #endregion
-
-        private async void RateUpButton_Click(object sender, RoutedEventArgs e)
-        {
-            if (_odr <= 990)
-                _odr += 10;
-
-            await StartImu();
-        }
-
-        private async void RateDownButton_Click(object sender, RoutedEventArgs e)
-        {
-            if (_odr >= 20)
-                _odr -= 10;
-
-            await StartImu();
-        }
+        #endregion        
     }
 }
 
@@ -442,8 +439,6 @@ namespace HelloBlueteraWpf
  *    To try out higher data rate, either disable Acceleration, buy a stronger machine, or wait until the issue is resolved.
  *    If the machine does choke, the Bluetera will be disconnect, but you will not get a 'disconnect' event, and you will have to reset your adapter (Windows-->Settings-->Bluetooth)
  *    
- * 2. We also change coordinates from Bluetera-Frame to WPF-Frame. Also note Bluetera is left-handed whereas WPF is right-handed
- *    WPF graphics: https://docs.microsoft.com/en-us/dotnet/framework/wpf/graphics-multimedia/3-d-graphics-overview
  * */
 
 
