@@ -23,7 +23,7 @@
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
             <TextBlock Grid.Column="0" VerticalAlignment="Center" Margin="15,0,0,0"
-                       LineStackingStrategy="BlockLineHeight" LineHeight="20" Foreground="#CF32C6F4">
+                       LineStackingStrategy="BlockLineHeight" LineHeight="20" Foreground="#CF32C6F4" Width="80">
                 <TextBlock.Text>
                     <MultiBinding StringFormat="{}Roll: {0:0.0}&#176;&#10;Pitch: {1:0.0}&#176;&#10;Yaw: {2:0.0}&#176;&#10;&#10;X: {3:0.0} g&#10;Y: {4:0.0} g&#10;Z: {5:0.0} g&#10;&#10;Rate: {6:0} Hz">
                         <Binding Path="Roll" />
@@ -47,7 +47,7 @@
             <StackPanel Orientation="Vertical" Grid.Column="2">
                 <lvc:CartesianChart Name="AccelerationChart" 
                                     Grid.Column="2" 
-                                    Width="280" Height="250" Margin="0,10,0,0"
+                                    Width="280" Height="250" Margin="0,30,0,0"
                                     DisableAnimations="True" DataTooltip="{x:Null}" Hoverable="False"  LegendLocation="Bottom">
                     <lvc:CartesianChart.ChartLegend>
                         <lvc:DefaultLegend BulletSize="20" Foreground="White"/>
@@ -78,12 +78,6 @@
                     <lvc:AngularGauge.Sections>
                         <lvc:AngularSection FromValue="0" ToValue="200" Fill="#CF32C6F4"/>
                     </lvc:AngularGauge.Sections>
-                    <!--<lvc:AngularGauge.Sections>
-                        <lvc:AngularSection FromValue="0" ToValue="200" Fill="#F8A725"/>
-                        -->
-                    <!--<lvc:AngularSection FromValue="200" ToValue="250" Fill="#FF3939"/>-->
-                    <!--
-                    </lvc:AngularGauge.Sections>-->
                 </lvc:AngularGauge>
             </StackPanel>
         </Grid>
